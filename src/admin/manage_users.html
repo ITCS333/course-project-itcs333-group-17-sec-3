@@ -30,43 +30,54 @@
         <h1>Admin Portal</h1>
     </header>
     <!-- TODO: Create a 'main' element to hold the primary content of the portal. -->
+<main>
 
     <!-- Section 1: Password Management -->
     <!-- TODO: Create a 'section' for the password management functionality. -->
+     <section id="password management">
     <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Change Your Password". -->
-
+     <h2>Change Your Password</h2>
     <!-- TODO: Create a 'form' for changing the password. The 'action' can be '#'. -->
+       <form action="#" method="post">
     <!-- TODO: Use a 'fieldset' to group the password-related fields. -->
+     <fieldset>
     <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
-
+     <legend>Password Update</legend>
     <!-- TODO: Add a 'label' for the current password input. 'for' should be "current-password". -->
+           <label for="current-password">Current Password:</label>
+
     <!-- TODO: Add an 'input' for the current password.
                          - type="password"
                          - id="current-password"
                          - required -->
+         <input type="password" id="current-password" required>
 
     <!-- TODO: Add a 'label' for the new password input. 'for' should be "new-password". -->
+     <lable for="new password">new password:</lable>
     <!-- TODO: Add an 'input' for the new password.
                          - type="password"
                          - id="new-password"
                          - minlength="8"
                          - required -->
-
+    <input type="password" id="new-password" minlength="8" required>
     <!-- TODO: Add a 'label' for the confirm password input. 'for' should be "confirm-password". -->
+     <label for="confirm-password">confirm new password:</label>
     <!-- TODO: Add an 'input' to confirm the new password.
                          - type="password"
                          - id="confirm-password"
                          - required -->
-
+    <input type="password" id="confirm-password" required>
     <!-- TODO: Add a 'button' to submit the form.
                          - type="submit"
                          - id="change"
                          - Text: "Update Password" -->
-
+    <button type="submit" id="change">Update Password</button>
     <!-- End of the fieldset. -->
+     </fieldset>
     <!-- End of the password form. -->
+     </form>
     <!-- End of the password management section. -->
-
+</section>
 
     <!-- Section 2: Student Management -->
     <!-- TODO: Create another 'section' for the student management functionality. -->
@@ -143,7 +154,7 @@
     <!-- End of the student management section. -->
 
     <!-- End of the main content area. -->
-
+</main>
 </body>
 
 </html>
