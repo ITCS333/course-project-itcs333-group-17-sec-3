@@ -82,49 +82,62 @@
     <!-- Section 2: Student Management -->
     <!-- TODO: Create another 'section' for the student management functionality. -->
     <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Manage Students". -->
-
+<h2>Manage Students</h2>
     <!-- Subsection 2.1: Add New Student Form -->
     <!-- TODO: Create a 'details' element so the "Add Student" form can be collapsed. -->
+     <details>
     <!-- TODO: Add a 'summary' element inside 'details' with the text "Add New Student". -->
-
+    <summary>Add New Student</summary>
     <!-- TODO: Create a 'form' for adding a new student. 'action' can be '#'. -->
+     <form action="#" method="post">
     <!-- TODO: Use a 'fieldset' to group the new student fields. -->
+     <fieldset>
     <!-- TODO: Add a 'legend' for the fieldset, e.g., "New Student Information". -->
-
+<legend>New Student Information</legend>
     <!-- TODO: Add a 'label' and 'input' for the student's full name.
                              - label 'for': "student-name"
                              - input 'id': "student-name"
                              - input 'type': "text"
                              - input: required -->
-
+<label for="student-name">full name :</label>
+<input type="text" id="student-name" required>
     <!-- TODO: Add a 'label' and 'input' for the student's ID.
                              - label 'for': "student-id"
                              - input 'id': "student-id"
                              - input 'type': "text"
                              - input: required -->
+<label for="student-id">Student ID :</label>
+<input type="text" id="student-id" required>
 
     <!-- TODO: Add a 'label' and 'input' for the student's email.
                              - label 'for': "student-email"
                              - input 'id': "student-email"
                              - input 'type': "email"
                              - input: required -->
+        <label for="student-email">Email:</label>
+        <input type="email" id="student-email" required>
 
     <!-- TODO: Add a 'label' and 'input' for the default password.
                              - label 'for': "default-password"
                              - input 'id': "default-password"
                              - input 'type': "text"
                              - You can pre-fill this with a value like "password123" or leave it blank. -->
+        <label for="default-password">Default Password:</label>
+        <input type="text" id="default-password" value="password123">
 
     <!-- TODO: Add a 'button' to submit the form.
                              - type="submit"
                              - id="add"
                              - Text: "Add Student" -->
+        <button type="submit" id="add">Add Student</button>
 
     <!-- End of the fieldset. -->
+    </fieldset>
     <!-- End of the add student form. -->
+     </form>
     <!-- End of the 'details' element. -->
 
-
+</details>
     <!-- Subsection 2.2: Student List -->
     <!-- TODO: Add a sub-heading (e.g., 'h3') for the list of students, "Registered Students". -->
 
