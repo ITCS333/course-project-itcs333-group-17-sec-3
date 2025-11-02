@@ -81,6 +81,7 @@
 
     <!-- Section 2: Student Management -->
     <!-- TODO: Create another 'section' for the student management functionality. -->
+     <section id="student management">
     <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Manage Students". -->
 <h2>Manage Students</h2>
     <!-- Subsection 2.1: Add New Student Form -->
@@ -140,32 +141,64 @@
 </details>
     <!-- Subsection 2.2: Student List -->
     <!-- TODO: Add a sub-heading (e.g., 'h3') for the list of students, "Registered Students". -->
+       <h3>Registered Students</h3>
 
     <!-- TODO: Create a 'table' to display the list of students. Give it an id="student-table". -->
+     <table id="student-table">
     <!-- TODO: Create a 'thead' for the table headers. -->
+     <thead>
     <!-- TODO: Create a 'tr' (table row) inside the 'thead'. -->
+     <tr>
     <!-- TODO: Create 'th' (table header) cells for "Name", "Student ID", "Email", and "Actions". -->
+     <th>Name</th>
+     <th>Student ID</th>
+        <th>Email</th>
+        <th>Actions</th>
     <!-- End of the row. -->
+     </tr>
     <!-- End of 'thead'. -->
-
+</thead>
     <!-- TODO: Create a 'tbody' for the table body, where student data will go. -->
+     <tbody>
     <!-- TODO: For now, add 2-3 rows of dummy data so you can see how the table is structured. -->
     <!-- Example Student Row: -->
+     
     <!-- TODO: Create a 'tr' for a student record. -->
+     <tr>
     <!-- TODO: Create 'td' (table data) cells for a student's name (e.g., "John Doe"), ID (e.g., "12345"), and email (e.g., "john.doe@example.com"). -->
+        <td>John Doe</td>
+        <td>12345</td>
+        <td>john.doe@example.com</td>
+     
+
 
     <!-- TODO: Create a final 'td' for action buttons. -->
+     <td>
     <!-- TODO: Add an "Edit" button. -->
+     <button>Edit</button>
     <!-- TODO: Add a "Delete" button. -->
+    <button>Delete</button>
+
     <!-- End of the actions 'td'. -->
+     </td>
     <!-- End of the student row. -->
-
+</tr>
     <!-- TODO: Add another 'tr' for a second student as another example. -->
+     <tr>
+        <td>alice</td>
+        <td>67890</td>
+        <td>alice@example.com</td>
+        <td>
+            <button>Edit</button>
+          <button>Delete</button>
+     </td>
+     </tr>
     <!-- End of 'tbody'. -->
+    </tbody>
     <!-- End of the table. -->
-
+</table>
     <!-- End of the student management section. -->
-
+</section>
     <!-- End of the main content area. -->
 </main>
 </body>
