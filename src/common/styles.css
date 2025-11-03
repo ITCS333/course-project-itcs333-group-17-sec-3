@@ -1,1 +1,9 @@
 /* CSS Styles */
+
+/* Home bage */
+
+.navbar-brand {
+   
+    font-weight: bold;
+    color: #0d6efd !important; /* Bootstrap primary color */
+}
