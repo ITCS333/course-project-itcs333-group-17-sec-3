@@ -18,8 +18,13 @@
      <!-- TODO: Add a title, e.g., "Web Dev Course Homepage". -->
      <title>Web Dev Course Homepage</title>
 
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
      <!-- TODO: Link to your CSS framework or stylesheet. -->
      <link rel="stylesheet" href="/src/common/styles.css">
+
+
 
 </head>
 
@@ -27,21 +32,12 @@
 
      <!-- TODO: Create a 'header' with a main heading ('h1') like "Welcome to the Web Development Course". -->
      <header>
-          <!-- <h1>Welcome to the Web Development Course</h1> -->  
-              <!-- Bootstrap CSS -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-     </header>
-
-
-     <!-- TODO: Create the 'main' content area. -->
-     <main>
           <!-- TODO: Create a 'nav' element to hold the site navigation. // add bootstrap -->
           <nav class="navbar navbar-expand-lg bg-body-tertiary">
                <div class="container-fluid">
 
-                                             <!-- TODO: Add a sub-heading ('h2') "Site Navigation". -->
-<!-- <h2>Site Navigation</h2> -->
+                    <!-- TODO: Add a sub-heading ('h2') "Site Navigation". -->
+                    <!-- <h2>Site Navigation</h2> -->
                     <a class="navbar-brand" href="#"> Web Dev Course </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                          data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
@@ -49,7 +45,7 @@
                          <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                         
+
 
                          <!-- TODO: Create an unordered list ('ul') to hold the links. -->
                          <ul class="navbar-nav">
@@ -92,42 +88,54 @@
 
 
                               <!-- Section: Student Pages -->
-<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Student Features
-                        </a>
+                              <li class="nav-item dropdown">
+                                   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        Student Features
+                                   </a>
 
 
-                              <!-- TODO: Add a list item ('li') with a link ('a') to the Student Resources page.
+                                   <!-- TODO: Add a list item ('li') with a link ('a') to the Student Resources page.
                      - Text: "View Course Resources" -->
-                                                        <ul class="dropdown-menu">
+                                   <ul class="dropdown-menu">
 
-                              <li><a class="dropdown-item" href="/src/resources/list.html">View Course Resources</a></li>
+                                        <li><a class="dropdown-item" href="/src/resources/list.html">View Course
+                                                  Resources</a></li>
 
-                              <!-- TODO: Add a list item ('li') with a link ('a') to the Student Weekly Breakdown page.
+                                        <!-- TODO: Add a list item ('li') with a link ('a') to the Student Weekly Breakdown page.
                      - Text: "View Weekly Breakdown" -->
-                              <li><a class="dropdown-item"  href="/src/weekly/list.html">View Weekly Breakdown</a></li>
+                                        <li><a class="dropdown-item" href="/src/weekly/list.html">View Weekly
+                                                  Breakdown</a></li>
 
-                              <!-- TODO: Add a list item ('li') with a link ('a') to the Student Assignments page.
+                                        <!-- TODO: Add a list item ('li') with a link ('a') to the Student Assignments page.
                      - Text: "View Assignments" -->
-                              <li><a class="dropdown-item" href="/src/assignments/list.html">View Assignments</a></li>
-                              </ul>
-
+                                        <li><a class="dropdown-item" href="/src/assignments/list.html">View
+                                                  Assignments</a></li>
+                                   </ul>
+                              </li>
                               <!-- TODO: Add a list item ('li') with a link ('a') to the Discussion Board.
                      - Text: "General Discussion Board" -->
-                              <li class="nav-item"><a class="nav-link" href="/src/discussion/baord.html">General Discussion Board</a></li>
+                              <li class="nav-item"><a class="nav-link" href="/src/discussion/baord.html">General
+                                        Discussion Board</a></li>
 
                               <!-- End of the unordered list. -->
                          </ul>
+
                          <!-- End of the 'nav' element. -->
                     </div>
           </nav>
 
           <h1>Welcome to the Web Development Course</h1>
 
+
+     </header>
+
+
+     <!-- TODO: Create the 'main' content area. -->
+     <main>
+
           <!-- End of 'main'. -->
      </main>
-  
+
      <!-- Bootstrap JS (required for dropdowns and toggles) -->
 
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
