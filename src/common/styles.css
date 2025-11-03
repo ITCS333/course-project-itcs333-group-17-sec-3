@@ -1,1 +1,46 @@
 /* CSS Styles */
+
+/* ---------------------------------------Home page style ----------------------------------------------------------------------- */
+
+.navbar-brand {
+
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+
+/* Style the header container */
+header {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style for the main heading */
+header h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Main content styling */
+main.home_page {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style the image */
+main.home_page img {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 1rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
