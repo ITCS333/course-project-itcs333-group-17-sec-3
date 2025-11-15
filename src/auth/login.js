@@ -18,12 +18,16 @@
 // the HTML document is parsed before this script runs.
 
 // TODO: Select the login form. (You'll need to add id="login-form" to the <form> in your HTML).
+const loginForm = document.getElementById("login-form");
 
 // TODO: Select the email input element by its ID.
+const emailInput = document.getElementById("email");
 
 // TODO: Select the password input element by its ID.
+const passwordInput = document.getElementById("password");
 
 // TODO: Select the message container element by its ID.
+const messageContainer = document.getElementById("message-container");
 
 // --- Functions ---
 
