@@ -43,7 +43,7 @@
             <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Change Your Password". -->
             <h2>Change Your Password</h2>
             <!-- TODO: Create a 'form' for changing the password. The 'action' can be '#'. -->
-            <form action="#" method="post">
+            <form action="#" method="post" id="password-form">
                 <!-- TODO: Use a 'fieldset' to group the password-related fields. -->
                 <fieldset>
                     <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
@@ -95,7 +95,7 @@
                 <!-- TODO: Add a 'summary' element inside 'details' with the text "Add New Student". -->
                 <summary>Add New Student</summary>
                 <!-- TODO: Create a 'form' for adding a new student. 'action' can be '#'. -->
-                <form action="#" method="post">
+                <form action="#" method="post" id="add-student-form">
                     <!-- TODO: Use a 'fieldset' to group the new student fields. -->
                     <fieldset>
                         <!-- TODO: Add a 'legend' for the fieldset, e.g., "New Student Information". -->
@@ -108,8 +108,8 @@
 
                         <div class="mb-3">
 
-                        <label for="student-name">full name :</label>
-                        <input type="text" id="student-name" required>
+                            <label for="student-name">full name :</label>
+                            <input type="text" id="student-name" required>
                         </div>
                         <!-- TODO: Add a 'label' and 'input' for the student's ID.
                              - label 'for': "student-id"
@@ -118,9 +118,9 @@
                              - input: required -->
 
                         <div class="mb-3">
-    
-                        <label for="student-id">Student ID :</label>
-                        <input type="text" id="student-id" required>
+
+                            <label for="student-id">Student ID :</label>
+                            <input type="text" id="student-id" required>
                         </div>
 
                         <!-- TODO: Add a 'label' and 'input' for the student's email.
@@ -130,10 +130,10 @@
                              - input: required -->
 
 
-                         <div class="mb-3">
+                        <div class="mb-3">
 
-                        <label for="student-email">Email:</label>
-                        <input type="email" id="student-email" required>
+                            <label for="student-email">Email:</label>
+                            <input type="email" id="student-email" required>
                         </div>
 
                         <!-- TODO: Add a 'label' and 'input' for the default password.
@@ -144,15 +144,15 @@
 
                         <div class="mb-3">
 
-                        <label for="default-password">Default Password:</label>
-                        <input type="text" id="default-password" value="password123">
+                            <label for="default-password">Default Password:</label>
+                            <input type="text" id="default-password" value="password123">
                         </div>
 
                         <!-- TODO: Add a 'button' to submit the form.
                              - type="submit"
                              - id="add"
                              - Text: "Add Student" -->
-                        <button type="submit" id="add" class="btn btn-primary" >Add Student</button>
+                        <button type="submit" id="add" class="btn btn-primary">Add Student</button>
 
                         <!-- End of the fieldset. -->
                     </fieldset>
@@ -164,65 +164,70 @@
             <!-- Subsection 2.2: Student List -->
             <!-- TODO: Add a sub-heading (e.g., 'h3') for the list of students, "Registered Students". -->
             <h3>Registered Students</h3>
+            
+           <!-- Add search input above the student table with id="search-input" -->
 
+            <div class="mb-3">
+                <label for="search-input" class="form-label">Search Students:</label>
+                <input type="text" id="search-input" class="form-control" placeholder="Type name or ID">
+            </div>
             <!-- TODO: Create a 'table' to display the list of students. Give it an id="student-table". -->
-             <div class="table-responsive">
+            <div class="table-responsive">
 
-            <table id="student-table" class="table table-striped table-bordered">
-                <!-- TODO: Create a 'thead' for the table headers. -->
-                <thead class="table-dark">
-                    <!-- TODO: Create a 'tr' (table row) inside the 'thead'. -->
-                    <tr>
-                        <!-- TODO: Create 'th' (table header) cells for "Name", "Student ID", "Email", and "Actions". -->
-                        <th>Name</th>
-                        <th>Student ID</th>
-                        <th>Email</th>
-                        <th>Actions</th>
-                        <!-- End of the row. -->
-                    </tr>
-                    <!-- End of 'thead'. -->
-                </thead>
-                <!-- TODO: Create a 'tbody' for the table body, where student data will go. -->
-                <tbody>
-                    <!-- TODO: For now, add 2-3 rows of dummy data so you can see how the table is structured. -->
-                    <!-- Example Student Row: -->
+                <table id="student-table" class="table table-striped table-bordered">
+                    <!-- TODO: Create a 'thead' for the table headers. -->
+                    <thead class="table-dark">
+                        <!-- TODO: Create a 'tr' (table row) inside the 'thead'. -->
+                        <tr>
+                            <!-- TODO: Create 'th' (table header) cells for "Name", "Student ID", "Email", and "Actions". -->
+                            <th>Name</th>
+                            <th>Student ID</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                            <!-- End of the row. -->
+                        </tr>
+                        <!-- End of 'thead'. -->
+                    </thead>
+                    <!-- TODO: Create a 'tbody' for the table body, where student data will go. -->
+                    <tbody>
+                        <!-- TODO: For now, add 2-3 rows of dummy data so you can see how the table is structured. -->
+                        <!-- Example Student Row: -->
 
-                    <!-- TODO: Create a 'tr' for a student record. -->
-                    <tr>
-                        <!-- TODO: Create 'td' (table data) cells for a student's name (e.g., "John Doe"), ID (e.g., "12345"), and email (e.g., "john.doe@example.com"). -->
-                        <td>John Doe</td>
-                        <td>12345</td>
-                        <td>john.doe@example.com</td>
+                        <!-- TODO: Create a 'tr' for a student record. -->
+                        <tr>
+                            <!-- TODO: Create 'td' (table data) cells for a student's name (e.g., "John Doe"), ID (e.g., "12345"), and email (e.g., "john.doe@example.com"). -->
+                            <td>John Doe</td>
+                            <td>12345</td>
+                            <td>john.doe@example.com</td>
 
 
 
-                        <!-- TODO: Create a final 'td' for action buttons. -->
-                        <td>
-                            <!-- TODO: Add an "Edit" button. -->
-                            <button class="btn btn-warning"
->Edit</button>
-                            <!-- TODO: Add a "Delete" button. -->
-                            <button class="btn btn-danger">Delete</button>
+                            <!-- TODO: Create a final 'td' for action buttons. -->
+                            <td>
+                                <!-- TODO: Add an "Edit" button. -->
+                                <button class="btn btn-warning">Edit</button>
+                                <!-- TODO: Add a "Delete" button. -->
+                                <button class="btn btn-danger">Delete</button>
 
-                            <!-- End of the actions 'td'. -->
-                        </td>
-                        <!-- End of the student row. -->
-                    </tr>
-                    <!-- TODO: Add another 'tr' for a second student as another example. -->
-                    <tr>
-                        <td>Alice Smith</td>
-                        <td>67890</td>
-                        <td>alice@example.com</td>
-                        <td>
-                            <button class= "btn btn-warning">Edit</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <!-- End of 'tbody'. -->
-                </tbody>
-                <!-- End of the table. -->
-            </table>
-            <!-- End of the student management section. -->
+                                <!-- End of the actions 'td'. -->
+                            </td>
+                            <!-- End of the student row. -->
+                        </tr>
+                        <!-- TODO: Add another 'tr' for a second student as another example. -->
+                        <tr>
+                            <td>Alice Smith</td>
+                            <td>67890</td>
+                            <td>alice@example.com</td>
+                            <td>
+                                <button class="btn btn-warning">Edit</button>
+                                <button class="btn btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                        <!-- End of 'tbody'. -->
+                    </tbody>
+                    <!-- End of the table. -->
+                </table>
+                <!-- End of the student management section. -->
         </section>
         <!-- End of the main content area. -->
     </main>
