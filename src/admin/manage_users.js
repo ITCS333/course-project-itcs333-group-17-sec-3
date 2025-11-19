@@ -50,6 +50,47 @@ const tableHeaders = document.querySelectorAll("thead th");
  */
 function createStudentRow(student) {
   // ... your implementation here ...
+  const tr = document.createElement("tr");
+
+  // Name
+  const nameTd = document.createElement("td");
+  nameTd.textContent = student.name;
+  tr.appendChild(nameTd);
+
+  // ID
+  const idTd = document.createElement("td");
+  idTd.textContent = student.id;
+  tr.appendChild(idTd);
+
+  // Email
+  const emailTd = document.createElement("td");
+  emailTd.textContent = student.email;
+  tr.appendChild(emailTd);
+
+    // Actions
+  const actionsTd = document.createElement("td");
+
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.className = "edit-btn btn btn-warning me-2";
+  editBtn.dataset.id = student.id; //to store the student ID
+  actionsTd.appendChild(editBtn);
+
+    const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.className = "delete-btn btn btn-danger";
+  deleteBtn.dataset.id = student.id; // store the student ID
+  actionsTd.appendChild(deleteBtn);
+
+  tr.appendChild(actionsTd);
+
+    return tr;
+
+
+
+
+
+
 }
 
 /**
