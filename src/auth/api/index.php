@@ -8,19 +8,16 @@
  */
 
 // --- Session Management ---
-// TODO: Start a PHP session using session_start()
-// This must be called before any output is sent to the browser
-// Sessions allow us to store user data across multiple pages
 session_start();
 
 // --- Set Response Headers ---
-// TODO: Set the Content-Type header to 'application/json'
-// This tells the browser that we're sending JSON data back
-
 header('Content-Type: application/json');
 
 // TODO: (Optional) Set CORS headers if your frontend and backend are on different domains
 // You'll need headers for Access-Control-Allow-Origin, Methods, and Headers
+ header('Access-Control-Allow-Origin: http://localhost:3000');
+ header('Access-Control-Allow-Headers: Content-Type');
+ header('Access-Control-Allow-Methods: POST');
 
 
 // --- Check Request Method ---
@@ -49,7 +46,7 @@ $data = json_decode($rawData, true);
 // Check if both 'email' and 'password' keys exist in the array
 // If either is missing, return an error response and exit
 if (!isset($data['email']) || !isset($data['password'])) {
-    echo json_encode(['success' => false, 'message' => 'Email and password are required']);
+    echo json_encode(['status' => 'error', 'message' => 'Email and password are required']);
     exit;
 }
 
@@ -65,17 +62,21 @@ $password = $data['password'];
 // TODO: Validate the email format on the server side
 // Use the appropriate filter function for email validation
 // If invalid, return an error response and exit
+// if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+//     echo json_encode(['success' => false, 'message' => 'Invalid email format']);
+//     exit;
+// }
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid email format']);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid email format']);
     exit;
 }
 
 
-
 // TODO: Validate the password length (minimum 8 characters)
 // If invalid, return an error response and exit
+
 if (strlen($password) < 8) {
-    echo json_encode(['success' => false, 'message' => 'Password must be at least 8 characters']);
+    echo json_encode(['status' => 'error', 'message' => 'Password must be at least 8 characters']);
     exit;
 }
 
@@ -85,7 +86,11 @@ if (strlen($password) < 8) {
 // Assume getDBConnection() returns a PDO instance with error mode set to exception
 // The function is defined elsewhere (e.g., in a config file or db.php)
 
-require 'db.php'; 
+// require 'db.php'; 
+require __DIR__ . '/../../../../db.php';
+
+// require_once 'config.php';
+
 
 // TODO: Wrap database operations in a try-catch block to handle PDO exceptions
 // This ensures you can return a proper JSON error response if something goes wrong
@@ -135,25 +140,23 @@ if ($user && password_verify($password, $user['password'])) {
     //
     // NOTE: This assumes passwords are stored as hashes using password_hash()
     // Never store passwords in plain text!
-        echo json_encode([
-            'success' => true,
-            'message' => 'Login successful',
-            'user' => [
-                'id' => $user['id'],
-                'name' => $user['name'],
-                'email' => $user['email']
-            ]
-        ]);
-        exit;
+echo json_encode([
+    'status' => 'success',
+    'message' => 'Login successful',
+    'user' => [
+        'id'    => $user['id'],
+        'name'  => $user['name'],
+        'email' => $user['email']
+    ]
+]);
+exit;
     } else {
 
 
-    // --- Handle Successful Authentication ---
-    // TODO: If password verification succeeds:
-            echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
-        exit;
+    // Failed login
+    echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
+    exit;
     }
-}
     
         // TODO: Store user information in session variables
         // Store: user_id, user_name, user_email, logged_in
@@ -189,7 +192,7 @@ if ($user && password_verify($password, $user['password'])) {
         
         
         // TODO: Exit the script
-
+}
 // TODO: Catch PDO exceptions in the catch block
 // Catch PDOException type
  catch (PDOException $e) {
