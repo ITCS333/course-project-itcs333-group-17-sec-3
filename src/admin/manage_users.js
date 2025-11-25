@@ -1,3 +1,4 @@
+
 /*
   Requirement: Add interactivity and data management to the Admin Portal.
 
@@ -161,31 +162,47 @@ function handleChangePassword(event) {
  * 5. Clear the "student-name", "student-id", "student-email", and "default-password" input fields.
  */
 function handleAddStudent(event) {
-  // ... your implementation here ...
- 
+  // 1. Prevent the form's default submission behavior
   event.preventDefault();
-
+  // 2. Get the values from "student-name", "student-id", and "student-email".
+  // here We no longer use "student-id" input because backend generates it from email prefix
   const name = document.getElementById("student-name").value.trim();
-  const id = document.getElementById("student-id").value.trim();
   const email = document.getElementById("student-email").value.trim();
-
-  if (!name || !id || !email) {
+  const password = document.getElementById("default-password").value.trim();
+  // 3. Perform validation:
+  if (!name || !email || !password) {
     alert("Please fill out all required fields.");
     return;
   }
-    const newStudent = { name, id, email };
-  students.push(newStudent);
+  // 4. Create a new student object { name, id, email }.
+  //   I am not using 'id' because backend derives it from email prefix
+  const newStudent = { name, email, password };
+  // 5. Send POST request to backend
+  fetch("api/index.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newStudent)
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Student added successfully!");
+        // 6. Clear the input fields
+        document.getElementById("student-name").value = "";
+        document.getElementById("student-email").value = "";
+        document.getElementById("default-password").value = "";
 
-  renderTable(students);
-
-  document.getElementById("student-name").value = "";
-  document.getElementById("student-id").value = "";
-  document.getElementById("student-email").value = "";
-
-  const defaultPass = document.getElementById("default-password");
-  if (defaultPass) defaultPass.value = "";
-
+        // Reload students from backend
+        // we fetch fresh data from backend to keep JSON dynamic
+        loadStudentsAndInitialize();
+      } else {
+        alert(data.message || "Failed to add student.");
+      }
+    })
+    .catch(err => console.error("Error adding student:", err));
 }
+
+
 
 /**
  * TODO: Implement the handleTableClick function.
@@ -298,32 +315,51 @@ function handleSort(event) {
  * - "click" on each header in `tableHeaders` -> `handleSort`
  */
 async function loadStudentsAndInitialize() {
-  // ... your implementation here ...
-    try {
-    const response = await fetch("api/students.json");
-
+  try {
+    // Fetch students from backend (GET request)
+    const response = await fetch("api/index.php"); // GET request
     if (!response.ok) {
-      console.error("Error loading api/students.json");
+      console.error("Failed to fetch students from backend.");
+      return;
+    }
+    // 2- Parse the JSON response
+    const data = await response.json();
+
+    // Check if backend returned success
+    if (!data.success) {
+      console.error("Backend error:", data.message);
       return;
     }
 
-    students = await response.json();
+    // 3- Map backend data to frontend format
+    // Backend returns: { name, email, ... }
+    // Frontend expects: { name, id, email }
+    students = data.data.map(user => {
+      const studentId = user.email.split("@")[0]; // get student ID from email prefix
+      return {
+        name: user.name,
+        id: studentId,
+        email: user.email
+      };
+    });
+
+    // 4- Render the table
     renderTable(students);
 
-    // Event listeners
+    // 5- Attach event listeners
     changePasswordForm.addEventListener("submit", handleChangePassword);
     addStudentForm.addEventListener("submit", handleAddStudent);
     studentTableBody.addEventListener("click", handleTableClick);
-
     searchInput.addEventListener("input", handleSearch);
     tableHeaders.forEach(th => th.addEventListener("click", handleSort));
 
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error("Error loading students:", error);
   }
-
 }
 
 // --- Initial Page Load ---
 // Call the main async function to start the application.
+
 loadStudentsAndInitialize();
+
