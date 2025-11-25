@@ -337,6 +337,77 @@ function createStudent($db, $data) {
 // }
 
 
+/**
+ * Function: Update an existing student
+ * Method: PUT
+ * 
+ * Required JSON Body:
+ *   - student_id: The student's university ID (to identify which student to update)
+ *   - name: Updated student name (optional)
+ *   - email: Updated student email (optional)
+ */
+function updateStudent($db, $data) {
+    //  Validate that student_id 
+    if (empty($data['student_id'])) {
+        sendResponse(["success" => false, "message" => "student_id is required"], 400);
+    }
+    $studentId = trim($data['student_id']);
+    $name = isset($data['name']) ? trim($data['name']) : null;
+    $email = isset($data['email']) ? trim($data['email']) : null;
+
+    //  Check if student exists
+    $stmt = $db->prepare("SELECT * FROM users WHERE is_admin = 0 AND SUBSTRING_INDEX(email,'@',1) = ?");
+    $stmt->execute([$studentId]);
+    $student = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$student) {
+        sendResponse(["success" => false, "message" => "Student not found"], 404);
+    }
+
+    //  Build UPDATE query dynamically
+    $fields = [];
+    $params = [];
+
+    if ($name) {
+        $fields[] = "name = ?";
+        $params[] = $name;
+    }
+
+    if ($email) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            sendResponse(["success" => false, "message" => "Invalid email format"], 400);
+        }
+
+        //Check if email already exists 
+        $stmt = $db->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
+        $stmt->execute([$email, $student['id']]);
+        if ($stmt->fetch()) {
+            sendResponse(["success" => false, "message" => "Email already exists"], 409);
+        }
+
+        $fields[] = "email = ?";
+        $params[] = $email;
+    }
+
+    if (empty($fields)) {
+        sendResponse(["success" => false, "message" => "No fields to update"], 400);
+    }
+
+    //Finalize query
+    $params[] = $student['id']; // last param for WHERE clause
+    $sql = "UPDATE users SET " . implode(", ", $fields) . " WHERE id = ?";
+    $stmt = $db->prepare($sql);
+
+    //Execute the query
+    $ok = $stmt->execute($params);
+
+    // Check if update was successful
+    if ($ok) {
+        sendResponse(["success" => true, "message" => "Student updated successfully"]);
+    } else {
+        sendResponse(["success" => false, "message" => "Failed to update student"], 500);
+    }
+}
+
 
 
 // /**
