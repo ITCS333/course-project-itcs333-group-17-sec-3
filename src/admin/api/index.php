@@ -150,29 +150,29 @@ function getStudents($db) {
  * Query Parameters:
  *   - student_id: The student's university ID
  */
+
 function getStudentById($db, $studentId) {
-    // TODO: Prepare SQL query to select student by student_id
-        $stmt = $db->prepare("SELECT id, student_id, name, email, created_at FROM students WHERE student_id = ?");
+    // Query users table, only non-admins
+    $stmt = $db->prepare("SELECT id, name, email, created_at FROM users WHERE is_admin = 0 AND SUBSTRING_INDEX(email, '@', 1) = ?");
 
-    // TODO: Bind the student_id parameter
+    // Bind the student ID (email prefix)
+    $stmt->execute([$studentId]);
 
-    // TODO: Execute the query
-        $stmt->execute([$studentId]);
+    // Fetch result
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // TODO: Fetch the result
-        $student = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // TODO: Check if student exists
-    // If yes, return success response with student data
-    // If no, return error response with 404 status
-
-    if ($student) {
+    if ($user) {
+        // Map email prefix to frontend id
+        $student = [
+            'name' => $user['name'],
+            'id' => explode('@', $user['email'])[0],
+            'email' => $user['email']
+        ];
         sendResponse(["success" => true, "data" => $student]);
     } else {
         sendResponse(["success" => false, "message" => "Student not found"], 404);
     }
 }
-
 
 
 /**
