@@ -253,90 +253,6 @@ function createStudent($db, $data) {
 
 
 
-
-// /**
-//  * Function: Update an existing student
-//  * Method: PUT
-//  * 
-//  * Required JSON Body:
-//  *   - student_id: The student's university ID (to identify which student to update)
-//  *   - name: Updated student name (optional)
-//  *   - email: Updated student email (optional)
-//  */
-// function updateStudent($db, $data) {
-//     // TODO: Validate that student_id is provided
-//     // If not, return error response with 400 status
-//         if (!isset($data['student_id'])) {
-//         sendResponse(["success" => false, "message" => "student_id required"], 400);
-//     }
-//         $student_id = $data['student_id'];
-
-//     // TODO: Check if student exists
-//     // Prepare and execute a SELECT query to find the student
-//     // If not found, return error response with 404 status
-//     $check = $db->prepare("SELECT id FROM students WHERE student_id = ?");
-//     $check->execute([$student_id]);
-//         if (!$check->fetch()) {
-//         sendResponse(["success" => false, "message" => "Student not found"], 404);
-//     }
-
-
-//     // TODO: Build UPDATE query dynamically based on provided fields
-//     // Only update fields that are provided in the request
-//         $fields = [];
-//     $params = [];
-
-//         if (isset($data['name'])) {
-//         $fields[] = "name = ?";
-//         $params[] = sanitizeInput($data['name']);
-//     }
-
-
-//     // TODO: If email is being updated, check if new email already exists
-//     // Prepare and execute a SELECT query
-//     // Exclude the current student from the check
-//     // If duplicate found, return error response with 409 status
-//         if (isset($data['email'])) {
-//         if (!validateEmail($data['email'])) {
-//             sendResponse(["success" => false, "message" => "Invalid email"], 400);
-//         }
-//                 $stmt = $db->prepare("SELECT id FROM students WHERE email = ? AND student_id != ?");
-//         $stmt->execute([$data['email'], $student_id]);
-
-//         if ($stmt->fetch()) {
-//             sendResponse(["success" => false, "message" => "Email already taken"], 409);
-//         }
-
-//         $fields[] = "email = ?";
-//         $params[] = sanitizeInput($data['email']);
-//     }
-//         if (empty($fields)) {
-//         sendResponse(["success" => false, "message" => "Nothing to update"], 400);
-//     }
-
-//     $params[] = $student_id;
-
-
-
-//     // TODO: Bind parameters dynamically
-//     // Bind only the parameters that are being updated
-//         $sql = "UPDATE students SET " . implode(", ", $fields) . " WHERE student_id = ?";
-//     $stmt = $db->prepare($sql);
-
-//     // TODO: Execute the query
-//         $ok = $stmt->execute($params);
-
-//     // TODO: Check if update was successful
-//     // If yes, return success response
-//     // If no, return error response with 500 status
-//         if ($ok) {
-//         sendResponse(["success" => true, "message" => "Student updated"]);
-//     } else {
-//         sendResponse(["success" => false, "message" => "Update failed"], 500);
-//     }
-// }
-
-
 /**
  * Function: Update an existing student
  * Method: PUT
@@ -417,40 +333,44 @@ function updateStudent($db, $data) {
 //  * Query Parameters or JSON Body:
 //  *   - student_id: The student's university ID
 //  */
-// function deleteStudent($db, $studentId) {
-//     // TODO: Validate that student_id is provided
-//     // If not, return error response with 400 status
-//         if (!$studentId) {
-//         sendResponse(["success" => false, "message" => "student_id required"], 400);
-//     }
+function deleteStudent($db, $studentId) {
 
+    // TODO: Validate that student_id is provided
+    // If not, return error response with 400 status
+    if (!$studentId || trim($studentId) === "") {
+        sendResponse(["success" => false, "message" => "student_id is required"], 400);
+    }
 
-//     // TODO: Check if student exists
-//     // Prepare and execute a SELECT query
-//     // If not found, return error response with 404 status
-//         $stmt = $db->prepare("SELECT id FROM students WHERE student_id = ?");
-//     $stmt->execute([$studentId]);
-//     if (!$stmt->fetch()) {
-//         sendResponse(["success" => false, "message" => "Student not found"], 404);
-//     }
+    $studentId = trim($studentId);
 
-//     // TODO: Prepare DELETE query
-//         $delete = $db->prepare("DELETE FROM students WHERE student_id = ?");
+    // Check if student exists by email prefix
+    $stmt = $db->prepare("
+        SELECT id FROM users
+        WHERE is_admin = 0
+        AND SUBSTRING_INDEX(email, '@', 1) = ?
+    ");
+    $stmt->execute([$studentId]);
+    $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//     // TODO: Bind the student_id parameter
+    if (!$student) {
+        sendResponse(["success" => false, "message" => "Student not found"], 404);
+    }
 
-//     // TODO: Execute the query
-//         $ok = $delete->execute([$studentId]);
+    // Internal DB ID
+    $dbId = $student['id'];
 
-//     // TODO: Check if delete was successful
-//     // If yes, return success response
-//     // If no, return error response with 500 status
-//         if ($ok) {
-//         sendResponse(["success" => true, "message" => "Student deleted"]);
-//     } else {
-//         sendResponse(["success" => false, "message" => "Delete failed"], 500);
-//     }
-// }
+    // 3-  Delete student
+    $deleteStmt = $db->prepare("DELETE FROM users WHERE id = ?");
+    $ok = $deleteStmt->execute([$dbId]);
+
+    // 4- Return result 
+    if ($ok) {
+        sendResponse(["success" => true, "message" => "Student deleted successfully"]);
+    } else {
+        sendResponse(["success" => false, "message" => "Failed to delete student"], 500);
+    }
+}
+
 
 
 
