@@ -216,14 +216,30 @@ function handleAddStudent(event) {
  * 3. (Optional) Check for "edit-btn" and implement edit logic.
  */
 function handleTableClick(event) {
-  // ... your implementation here ...
   if (event.target.classList.contains("delete-btn")) {
-    const id = event.target.dataset.id;
-    students = students.filter(s => s.id !== id);
-    renderTable(students);
+
+    const id = event.target.dataset.id;  // this is the email prefix
+    if (!id) return;
+
+    //  1. Call backend delete API
+    fetch(`api/index.php?student_id=${id}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      if (data.success) {
+        //  2. Remove from frontend
+        students = students.filter(s => s.id !== id);
+        renderTable(students);
+      } else {
+        alert(data.message || "Failed to delete student");
+      }
+
+    })
+    .catch(err => console.error("Delete error:", err));
   }
 }
-
 /**
  * TODO: Implement the handleSearch function.
  * This function will be called on the "input" event of the `searchInput`.
