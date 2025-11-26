@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 
 // TODO: Include the database connection class
 // Assume the Database class has a method getConnection() that returns a PDO instance
-require_once __DIR__ . '/../../../db.php';
+ require_once __DIR__ . '/../../../../dp.php';
 
 
 // TODO: Get the PDO database connection
@@ -82,6 +82,8 @@ $action = $_GET['action'] ?? null;
  *   - sort: Optional field to sort by (name, student_id, email)
  *   - order: Optional sort order (asc or desc)
  */
+
+
 function getStudents($db) {
     // TODO: Check if search parameter exists
     // If yes, prepare SQL query with WHERE clause using LIKE
@@ -126,7 +128,7 @@ function getStudents($db) {
 
     // TODO: Fetch all results as an associative array
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  
+
      // Map database id to frontend student_id (from email) ---
     $students = array_map(function($u) {
         $studentId = explode('@', $u['email'])[0]; // get student number from email
@@ -150,7 +152,6 @@ function getStudents($db) {
  * Query Parameters:
  *   - student_id: The student's university ID
  */
-
 function getStudentById($db, $studentId) {
     // Query users table, only non-admins
     $stmt = $db->prepare("SELECT id, name, email, created_at FROM users WHERE is_admin = 0 AND SUBSTRING_INDEX(email, '@', 1) = ?");
@@ -215,7 +216,7 @@ function createStudent($db, $data) {
     // TODO: Check if student_id or email already exists
     // Prepare and execute a SELECT query to check for duplicates
     // If duplicate found, return error response with 409 status (Conflict)
-    
+
   // Generate student_id from email
     $student_id = explode('@', $email)[0];
 
@@ -252,7 +253,6 @@ function createStudent($db, $data) {
 }
 
 
-
 /**
  * Function: Update an existing student
  * Method: PUT
@@ -263,7 +263,7 @@ function createStudent($db, $data) {
  *   - email: Updated student email (optional)
  */
 function updateStudent($db, $data) {
-    //  Validate that student_id 
+    //  Validate that student_id is provided
     if (empty($data['student_id'])) {
         sendResponse(["success" => false, "message" => "student_id is required"], 400);
     }
@@ -279,7 +279,7 @@ function updateStudent($db, $data) {
         sendResponse(["success" => false, "message" => "Student not found"], 404);
     }
 
-    //  Build UPDATE query dynamically
+    // Build UPDATE query dynamically
     $fields = [];
     $params = [];
 
@@ -293,7 +293,7 @@ function updateStudent($db, $data) {
             sendResponse(["success" => false, "message" => "Invalid email format"], 400);
         }
 
-        //Check if email already exists 
+        //  Check if email already exists 
         $stmt = $db->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
         $stmt->execute([$email, $student['id']]);
         if ($stmt->fetch()) {
@@ -308,12 +308,12 @@ function updateStudent($db, $data) {
         sendResponse(["success" => false, "message" => "No fields to update"], 400);
     }
 
-    //Finalize query
-    $params[] = $student['id']; // last param for WHERE clause
+    //  Finalize query
+    $params[] = $student['id']; 
     $sql = "UPDATE users SET " . implode(", ", $fields) . " WHERE id = ?";
     $stmt = $db->prepare($sql);
 
-    //Execute the query
+    //  Execute the query
     $ok = $stmt->execute($params);
 
     // Check if update was successful
@@ -325,25 +325,16 @@ function updateStudent($db, $data) {
 }
 
 
-
-// /**
-//  * Function: Delete a student
-//  * Method: DELETE
-//  * 
-//  * Query Parameters or JSON Body:
-//  *   - student_id: The student's university ID
-//  */
 function deleteStudent($db, $studentId) {
 
-    // TODO: Validate that student_id is provided
-    // If not, return error response with 400 status
+    //  Validate student_id
     if (!$studentId || trim($studentId) === "") {
         sendResponse(["success" => false, "message" => "student_id is required"], 400);
     }
 
     $studentId = trim($studentId);
 
-    // Check if student exists by email prefix
+    //  Check if student exists by email prefix
     $stmt = $db->prepare("
         SELECT id FROM users
         WHERE is_admin = 0
@@ -359,11 +350,11 @@ function deleteStudent($db, $studentId) {
     // Internal DB ID
     $dbId = $student['id'];
 
-    // 3-  Delete student
+    //  Delete student
     $deleteStmt = $db->prepare("DELETE FROM users WHERE id = ?");
     $ok = $deleteStmt->execute([$dbId]);
 
-    // 4- Return result 
+    //  Return result 
     if ($ok) {
         sendResponse(["success" => true, "message" => "Student deleted successfully"]);
     } else {
@@ -373,17 +364,15 @@ function deleteStudent($db, $studentId) {
 
 
 
-
-
-// /**
-//  * Function: Change password
-//  * Method: POST with action=change_password
-//  * 
-//  * Required JSON Body:
-//  *   - student_id: The student's university ID (identifies whose password to change)
-//  *   - current_password: The student's current password
-//  *   - new_password: The new password to set
-//  */
+/**
+ * Function: Change password
+ * Method: POST with action=change_password
+ * 
+ * Required JSON Body:
+ *   - student_id: The student's university ID (identifies whose password to change)
+ *   - current_password: The student's current password
+ *   - new_password: The new password to set
+ */
 // function changePassword($db, $data) {
 //     // TODO: Validate required fields
 //     // Check if student_id, current_password, and new_password are provided
@@ -444,115 +433,121 @@ function deleteStudent($db, $studentId) {
 
 
 
-// // ============================================================================
-// // MAIN REQUEST ROUTER
-// // ============================================================================
+// ============================================================================
+// MAIN REQUEST ROUTER
+// ============================================================================
 
-// try {
-//     // TODO: Route the request based on HTTP method
+try {
+    // TODO: Route the request based on HTTP method
 
-//     if ($method === 'GET') {
-//         // TODO: Check if student_id is provided in query parameters
-//         // If yes, call getStudentById()
-//         // If no, call getStudents() to get all students (with optional search/sort)
-//                 if ($studentId) getStudentById($db, $studentId);
-//         else getStudents($db);
+    if ($method === 'GET') {
+        // TODO: Check if student_id is provided in query parameters
+        // If yes, call getStudentById()
+        // If no, call getStudents() to get all students (with optional search/sort)
+                if ($studentId) getStudentById($db, $studentId);
+        else getStudents($db);
 
-//     } elseif ($method === 'POST') {
-//         // TODO: Check if this is a change password request
-//         // Look for action=change_password in query parameters
-//         // If yes, call changePassword()
-//         // If no, call createStudent()
-//                 if ($action === "change_password") changePassword($db, $data);
-//         else createStudent($db, $data);
+    } elseif ($method === 'POST') {
+        // TODO: Check if this is a change password request
+        // Look for action=change_password in query parameters
+        // If yes, call changePassword()
+        // If no, call createStudent()
+                if ($action === "change_password") changePassword($db, $data);
+        else createStudent($db, $data);
 
-//     } elseif ($method === 'PUT') {
-//         // TODO: Call updateStudent()
-//                 updateStudent($db, $data);
+    } elseif ($method === 'PUT') {
+        // TODO: Call updateStudent()
+                updateStudent($db, $data);
 
-//     } elseif ($method === 'DELETE') {
-//         // TODO: Get student_id from query parameter or request body
-//         // Call deleteStudent()
-//                 if ($studentId) deleteStudent($db, $studentId);
-//         else sendResponse(["success" => false, "message" => "student_id required"], 400);
+    } elseif ($method === 'DELETE') {
+        // TODO: Get student_id from query parameter or request body
+        // Call deleteStudent()
+                if ($studentId) deleteStudent($db, $studentId);
+        else sendResponse(["success" => false, "message" => "student_id required"], 400);
 
-//     } else {
-//         // TODO: Return error for unsupported methods
-//         // Set HTTP status to 405 (Method Not Allowed)
-//         // Return JSON error message
-//          sendResponse(["success" => false, "message" => "Method not allowed"], 405);
+    } else {
+        // TODO: Return error for unsupported methods
+        // Set HTTP status to 405 (Method Not Allowed)
+        // Return JSON error message
+         sendResponse(["success" => false, "message" => "Method not allowed"], 405);
 
-//     }
+    }
 
-// } catch (PDOException $e) {
-//     // TODO: Handle database errors
-//     // Log the error message (optional)
-//     // Return generic error response with 500 status
-//         error_log("DB ERROR: " . $e->getMessage());
-//         sendResponse(["success" => false, "message" => "Database error"], 500);
-    
-
-
-// } catch (Exception $e) {
-//     // TODO: Handle general errors
-//     // Return error response with 500 status
-//         error_log("API Error: " . $e->getMessage());
-//     sendResponse(["success" => false, "message" => "Server error"], 500);
+} catch (PDOException $e) {
+    // TODO: Handle database errors
+    // Log the error message (optional)
+    // Return generic error response with 500 status
+        // error_log("DB ERROR: " . $e->getMessage());
+        // sendResponse(["success" => false, "message" => "Database error"], 500);
+    error_log("Database error: " . $e->getMessage());
+    sendResponse([
+        "success" => false,
+        "message" => "Database error",
+        "error" => $e->getMessage()
+    ], 500);
 
 
-// }
+} catch (Exception $e) {
+    // TODO: Handle general errors
+    // Return error response with 500 status
+        error_log("API Error: " . $e->getMessage());
+    sendResponse(["success" => false, "message" => "Server error"], 500);
 
 
-// // ============================================================================
-// // HELPER FUNCTIONS (Optional but Recommended)
-// // ============================================================================
-
-// /**
-//  * Helper function to send JSON response
-//  * 
-//  * @param mixed $data - Data to send
-//  * @param int $statusCode - HTTP status code
-//  */
-// function sendResponse($data, $statusCode = 200) {
-//     // TODO: Set HTTP response code
-//         http_response_code($statusCode);
-
-//     // TODO: Echo JSON encoded data
-//         echo json_encode($data);
-
-//     // TODO: Exit to prevent further execution
-//         exit;
-
-// }
+}
 
 
-// /**
-//  * Helper function to validate email format
-//  * 
-//  * @param string $email - Email address to validate
-//  * @return bool - True if valid, false otherwise
-//  */
-// function validateEmail($email) {
-//     // TODO: Use filter_var with FILTER_VALIDATE_EMAIL
-//     // Return true if valid, false otherwise
-//         return filter_var($email, FILTER_VALIDATE_EMAIL);
+// ============================================================================
+// HELPER FUNCTIONS (Optional but Recommended)
+// ============================================================================
 
-// }
+/**
+ * Helper function to send JSON response
+ * 
+ * @param mixed $data - Data to send
+ * @param int $statusCode - HTTP status code
+ */
+function sendResponse($data, $statusCode = 200) {
+    // TODO: Set HTTP response code
+        http_response_code($statusCode);
+
+    // TODO: Echo JSON encoded data
+        echo json_encode($data);
+
+    // TODO: Exit to prevent further execution
+        exit;
+
+}
 
 
-// /**
-//  * Helper function to sanitize input
-//  * 
-//  * @param string $data - Data to sanitize
-//  * @return string - Sanitized data
-//  */
-// function sanitizeInput($data) {
-//     // TODO: Trim whitespace
-//     // TODO: Strip HTML tags using strip_tags()
-//     // TODO: Convert special characters using htmlspecialchars()
-//     // Return sanitized data
-//         return htmlspecialchars(strip_tags(trim($data)));
+/**
+ * Helper function to validate email format
+ * 
+ * @param string $email - Email address to validate
+ * @return bool - True if valid, false otherwise
+ */
+function validateEmail($email) {
+    // TODO: Use filter_var with FILTER_VALIDATE_EMAIL
+    // Return true if valid, false otherwise
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
 
-// }
+}
 
-// ?>
+
+/**
+ * Helper function to sanitize input
+ * 
+ * @param string $data - Data to sanitize
+ * @return string - Sanitized data
+ */
+function sanitizeInput($data) {
+    // TODO: Trim whitespace
+    // TODO: Strip HTML tags using strip_tags()
+    // TODO: Convert special characters using htmlspecialchars()
+    // Return sanitized data
+        return htmlspecialchars(strip_tags(trim($data)));
+
+}
+
+?>
+

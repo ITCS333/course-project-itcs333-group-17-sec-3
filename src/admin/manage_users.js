@@ -106,7 +106,6 @@ studentTableBody.innerHTML = ""; // clear old rows
     const row = createStudentRow(student);
     studentTableBody.appendChild(row);
   });
-  
 }
 
 /**
@@ -200,6 +199,7 @@ function handleAddStudent(event) {
       }
     })
     .catch(err => console.error("Error adding student:", err));
+
 }
 
 
@@ -215,7 +215,17 @@ function handleAddStudent(event) {
  * - Call `renderTable(students)` to update the view.
  * 3. (Optional) Check for "edit-btn" and implement edit logic.
  */
+// function handleTableClick(event) {
+//   // ... your implementation here ...
+//   if (event.target.classList.contains("delete-btn")) {
+//     const id = event.target.dataset.id;
+//     students = students.filter(s => s.id !== id);
+//     renderTable(students);
+//   }
+// }
+
 function handleTableClick(event) {
+  const target = event.target;
   if (event.target.classList.contains("delete-btn")) {
 
     const id = event.target.dataset.id;  // this is the email prefix
@@ -255,7 +265,7 @@ function handleTableClick(event) {
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.show();
       }
-}
+    }
 const editStudentForm = document.getElementById("edit-student-form");
 
 editStudentForm.addEventListener("submit", function(event) {
@@ -307,17 +317,7 @@ editStudentForm.addEventListener("submit", function(event) {
     .catch(err => console.error("Update error:", err));
 });
 
-/**
- * TODO: Implement the handleSearch function.
- * This function will be called on the "input" event of the `searchInput`.
- * It should:
- * 1. Get the search term from `searchInput.value` and convert it to lowercase.
- * 2. If the search term is empty, call `renderTable(students)` to show all students.
- * 3. If the search term is not empty:
- * - Filter the global 'students' array to find students whose name (lowercase)
- * includes the search term.
- * - Call `renderTable` with the *filtered array*.
- */
+
 function handleSearch() {
   const term = searchInput.value.toLowerCase();
 
@@ -445,4 +445,3 @@ async function loadStudentsAndInitialize() {
 // Call the main async function to start the application.
 
 loadStudentsAndInitialize();
-
