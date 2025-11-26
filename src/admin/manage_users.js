@@ -239,7 +239,74 @@ function handleTableClick(event) {
     })
     .catch(err => console.error("Delete error:", err));
   }
+      // EDIT
+      if (target.classList.contains("edit-btn")) {
+        const id = target.dataset.id;
+        const student = students.find(s => s.id === id);
+        if (!student) return;
+
+        // Pre-fill modal fields
+        document.getElementById("edit-student-id").value = student.id;
+        document.getElementById("edit-name").value = student.name;
+        document.getElementById("edit-email").value = student.email;
+
+        // Show modal
+        const modalEl = document.getElementById("editStudentModal");
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+      }
 }
+const editStudentForm = document.getElementById("edit-student-form");
+
+editStudentForm.addEventListener("submit", function(event) {
+    event.preventDefault(); // stop the form from reloading the page
+
+    const studentId = document.getElementById("edit-student-id").value;
+    const newName = document.getElementById("edit-name").value.trim();
+    const newEmail = document.getElementById("edit-email").value.trim();
+
+    if (!newName || !newEmail) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    const updatedData = {
+        student_id: studentId,
+        name: newName,
+        email: newEmail
+    };
+
+    fetch("api/index.php", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Student updated successfully!");
+
+            // Update the frontend array
+            const studentIndex = students.findIndex(s => s.id === studentId);
+            if (studentIndex !== -1) {
+                students[studentIndex].name = newName;
+                students[studentIndex].email = newEmail;
+                students[studentIndex].id = newEmail.split("@")[0];
+            }
+
+            renderTable(students);
+
+            // Close the modal
+            const modalEl = document.getElementById("editStudentModal");
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+        } else {
+            alert(data.message || "Failed to update student");
+        }
+    })
+    .catch(err => console.error("Update error:", err));
+});
+
 /**
  * TODO: Implement the handleSearch function.
  * This function will be called on the "input" event of the `searchInput`.

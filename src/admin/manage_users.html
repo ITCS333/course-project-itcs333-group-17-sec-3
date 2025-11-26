@@ -231,6 +231,39 @@
         </section>
         <!-- End of the main content area. -->
     </main>
+      <!-- Edit Student Modal -->
+    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Student</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <form id="edit-student-form">
+
+              <input type="hidden" id="edit-student-id">
+
+              <div class="mb-3">
+                <label for="edit-name" class="form-label">Full Name</label>
+                <input type="text" id="edit-name" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="edit-email" class="form-label">Email</label>
+                <input type="email" id="edit-email" class="form-control" required>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
     <script src="./manage_users.js" defer></script>
 
 </body>
