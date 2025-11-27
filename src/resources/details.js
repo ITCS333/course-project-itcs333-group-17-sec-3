@@ -1,12 +1,12 @@
 /*
-  Requirement: Populate the resource detail page and discussion forum.
+  Details page logic: show one resource + comments.
 */
 
-// --- Global Data Store ---
+// Global
 let currentResourceId = null;
 let currentComments = [];
 
-// --- Element Selections ---
+// Elements
 const resourceTitle = document.querySelector('#resource-title');
 const resourceDescription = document.querySelector('#resource-description');
 const resourceLink = document.querySelector('#resource-link');
@@ -14,31 +14,20 @@ const commentList = document.querySelector('#comment-list');
 const commentForm = document.querySelector('#comment-form');
 const newComment = document.querySelector('#new-comment');
 
-// --- Functions ---
-
-/**
- * Get the resource id from the URL query string.
- * Example: details.html?id=res_1
- */
+// Get ?id=... from URL
 function getResourceIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  return id;
+  return params.get('id');
 }
 
-/**
- * Render the main resource info on the page.
- */
+// Fill resource info
 function renderResourceDetails(resource) {
   resourceTitle.textContent = resource.title;
   resourceDescription.textContent = resource.description;
   resourceLink.href = resource.link;
 }
 
-/**
- * Create a single comment <article>.
- * comment: { author, text }
- */
+// Create one comment article
 function createCommentArticle(comment) {
   const article = document.createElement('article');
   article.classList.add('comment');
@@ -55,17 +44,14 @@ function createCommentArticle(comment) {
   return article;
 }
 
-/**
- * Render all comments from currentComments.
- */
+// Render all comments
 function renderComments() {
-  // امسحي التعليقات القديمة
   commentList.innerHTML = '';
 
   if (!currentComments || currentComments.length === 0) {
-    const emptyMsg = document.createElement('p');
-    emptyMsg.textContent = 'No comments yet. Be the first to comment.';
-    commentList.appendChild(emptyMsg);
+    const msg = document.createElement('p');
+    msg.textContent = 'No comments yet. Be the first to comment.';
+    commentList.appendChild(msg);
     return;
   }
 
@@ -75,35 +61,24 @@ function renderComments() {
   });
 }
 
-/**
- * Handle adding a new comment from the form.
- */
+// Handle new comment
 function handleAddComment(event) {
   event.preventDefault();
 
   const commentText = newComment.value.trim();
-  if (!commentText) {
-    return;
-  }
+  if (!commentText) return;
 
   const newObj = {
     author: 'Student',
     text: commentText
   };
 
-  // أضفناه للمصفوفة في الذاكرة فقط
   currentComments.push(newObj);
-
-  // أعد رسم التعليقات
   renderComments();
-
-  // نظّف التكسيت إريا
   newComment.value = '';
 }
 
-/**
- * Initialize page: load resource + comments and wire events.
- */
+// Initialize page
 async function initializePage() {
   currentResourceId = getResourceIdFromURL();
 
@@ -114,8 +89,8 @@ async function initializePage() {
 
   try {
     const [resourcesRes, commentsRes] = await Promise.all([
-      fetch('resources.json'),
-      fetch('resource-comments.json')
+      fetch('api/resources.json'),
+      fetch('api/comments.json')
     ]);
 
     const resourcesData = await resourcesRes.json();
@@ -140,10 +115,10 @@ async function initializePage() {
     }
 
   } catch (error) {
-    console.error('Error loading resource details:', error);
+    console.error('Error loading details:', error);
     resourceTitle.textContent = 'Error loading resource.';
   }
 }
 
-// --- Initial Page Load ---
+// Initial load
 initializePage();
