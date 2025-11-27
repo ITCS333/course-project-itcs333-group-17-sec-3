@@ -1,47 +1,26 @@
 /*
-  Requirement: Make the "Manage Resources" page interactive.
-
-  Instructions:
-  1. Link this file to `admin.html` using:
-     <script src="admin.js" defer></script>
-  
-  2. In `admin.html`, add an `id="resources-tbody"` to the <tbody> element
-     inside your `resources-table`.
-  
-  3. Implement the TODOs below.
+  Admin page logic: load resources, add, delete (in-memory only)
 */
 
-// --- Global Data Store ---
-// This will hold the resources loaded from the JSON file.
+// Global data
 let resources = [];
 
-// --- Element Selections ---
-// Select the resource form ('#resource-form').
+// Elements
 const resourceForm = document.querySelector('#resource-form');
-
-// Select the resources table body ('#resources-tbody').
 const resourcesTableBody = document.querySelector('#resources-tbody');
 
-// --- Functions ---
-
-/**
- * Create a <tr> element for a single resource.
- * resource: { id, title, description, link? }
- */
+// Create one table row
 function createResourceRow(resource) {
   const { id, title, description } = resource;
 
   const tr = document.createElement('tr');
 
-  // Title cell
   const titleTd = document.createElement('td');
   titleTd.textContent = title;
 
-  // Description cell
   const descTd = document.createElement('td');
   descTd.textContent = description;
 
-  // Actions cell
   const actionsTd = document.createElement('td');
 
   const editBtn = document.createElement('button');
@@ -66,33 +45,26 @@ function createResourceRow(resource) {
   return tr;
 }
 
-/**
- * Render the entire table from the global `resources` array.
- */
+// Render all rows
 function renderTable() {
-  // Clear existing rows
   resourcesTableBody.innerHTML = '';
 
-  // Loop through resources and append rows
   resources.forEach(resource => {
     const row = createResourceRow(resource);
     resourcesTableBody.appendChild(row);
   });
 
-  // Optional: لو حابة تحطين رسالة لما تكون القائمة فاضية
   if (resources.length === 0) {
     const emptyRow = document.createElement('tr');
     const emptyCell = document.createElement('td');
     emptyCell.colSpan = 3;
     emptyCell.textContent = 'No resources available.';
-    resourcesTableBody.appendChild(emptyRow);
     emptyRow.appendChild(emptyCell);
+    resourcesTableBody.appendChild(emptyRow);
   }
 }
 
-/**
- * Handle form submission: add a new resource (in-memory only).
- */
+// Handle add resource from form
 function handleAddResource(event) {
   event.preventDefault();
 
@@ -116,69 +88,49 @@ function handleAddResource(event) {
     link
   };
 
-  // Add to global array
   resources.push(newResource);
-
-  // Re-render table
   renderTable();
-
-  // Reset form
   resourceForm.reset();
 }
 
-/**
- * Handle clicks on the table body (event delegation).
- * For now, we implement only Delete as required.
- */
+// Handle delete (and optional edit) using event delegation
 function handleTableClick(event) {
   const target = event.target;
 
-  // Delete button
+  // Delete
   if (target.classList.contains('delete-btn')) {
     const idToDelete = target.dataset.id;
-
-    // Filter out the deleted resource
-    resources = resources.filter(resource => resource.id !== idToDelete);
-
-    // Re-render table
+    resources = resources.filter(r => r.id !== idToDelete);
     renderTable();
   }
 
-  // (Optional) Edit button – مو مطلوب صراحة في الـ TODO، بس ممكن تضيفينه لاحقًا
-  // if (target.classList.contains('edit-btn')) { ... }
 }
 
-/**
- * Load initial data from resources.json and wire up event listeners.
- */
+// Load initial data from api/resources.json and attach listeners
 async function loadAndInitialize() {
   try {
-    const response = await fetch('resources.json');
-    if (!response.ok) {
-      console.warn('Could not load resources.json, using empty list instead.');
-      resources = [];
-    } else {
+    const response = await fetch('api/resources.json');
+    if (response.ok) {
       const data = await response.json();
-      // نتوقع أن البيانات تكون مصفوفة من الكائنات { id, title, description, link }
       resources = Array.isArray(data) ? data : [];
+    } else {
+      resources = [];
+      console.warn('Could not load api/resources.json');
     }
-  } catch (error) {
-    console.error('Error loading resources.json:', error);
+  } catch (err) {
+    console.error('Error loading resources:', err);
     resources = [];
   }
 
-  // أول رندر للجدول
   renderTable();
 
-  // Event listeners
   if (resourceForm) {
     resourceForm.addEventListener('submit', handleAddResource);
   }
-
   if (resourcesTableBody) {
     resourcesTableBody.addEventListener('click', handleTableClick);
   }
 }
 
-// --- Initial Page Load ---
+// Initial load
 loadAndInitialize();
