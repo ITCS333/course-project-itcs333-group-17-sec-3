@@ -1,0 +1,14 @@
+[
+  {
+    "id": "res_1",
+    "title": "Chapter 1 Notes",
+    "description": "Introductory notes for Chapter 1: Internet Basics.",
+    "link": "https://example.com/ch1"
+  },
+  {
+    "id": "res_2",
+    "title": "HTML Tutorial",
+    "description": "Beginner-friendly HTML tutorial.",
+    "link": "https://example.com/html"
+  }
+]
