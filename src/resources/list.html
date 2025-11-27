@@ -1,7 +1,5 @@
 <!--
   Requirement: Create the Student View for Course Resources
-
-  Instructions:
   This page is a read-only view for students to see all available course materials.
   Each resource should link to a dedicated detail page.
 -->
@@ -15,7 +13,7 @@
     <!-- Page title -->
     <title>Course Resources</title>
 
-    <!-- Stylesheet / Framework (عدّلي المسار إذا لزم) -->
+    <!-- Stylesheet / Framework -->
     <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body>
@@ -28,8 +26,8 @@
     <!-- Main content area -->
     <main>
 
-        <!-- Resource List Section -->
-        <section>
+        <!-- Resource List Section (IMPORTANT ID ADDED) -->
+        <section id="resource-list-section">
 
             <!-- Resource 1 -->
             <article>
@@ -66,9 +64,10 @@
             </article>
 
         </section>
-        <!-- End of resource list -->
 
     </main>
+
+    <script src="list.js" defer></script>
 
 </body>
 </html>
