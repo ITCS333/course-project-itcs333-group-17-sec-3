@@ -1,35 +1,26 @@
 /*
-  Requirement: Populate the "Course Resources" list page.
+  List page logic: show all resources to students.
 */
 
-// --- Element Selections ---
+// Section that يحتوي على الـ articles
 const listSection = document.querySelector('#resource-list-section');
 
-// --- Functions ---
-
-/**
- * Create one <article> for a resource
- */
+// Create one <article> for a resource
 function createResourceArticle(resource) {
   const { id, title, description } = resource;
 
-  // Create article
   const article = document.createElement('article');
 
-  // Title
   const h2 = document.createElement('h2');
   h2.textContent = title;
 
-  // Description
   const p = document.createElement('p');
   p.textContent = description;
 
-  // View link
   const a = document.createElement('a');
   a.textContent = 'View Resource & Discussion';
-  a.href = `details.html?id=${id}`;  // IMPORTANT
+  a.href = `details.html?id=${id}`;
 
-  // Append elements
   article.appendChild(h2);
   article.appendChild(p);
   article.appendChild(a);
@@ -37,28 +28,23 @@ function createResourceArticle(resource) {
   return article;
 }
 
-/**
- * Load resources from resources.json and render them
- */
+// Load from api/resources.json and render
 async function loadResources() {
   try {
-    const res = await fetch('resources.json');
+    const res = await fetch('api/resources.json');
     const data = await res.json();
 
-    // Clear old content
     listSection.innerHTML = '';
 
-    // Loop and add each article
     data.forEach(resource => {
       const article = createResourceArticle(resource);
       listSection.appendChild(article);
     });
-
   } catch (error) {
     console.error('Error loading resources:', error);
     listSection.textContent = 'Failed to load resources.';
   }
 }
 
-// --- Initial Page Load ---
+// Initial load
 loadResources();
