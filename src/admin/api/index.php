@@ -29,23 +29,43 @@
 // Allow cross-origin requests (CORS) if needed
 // Allow specific HTTP methods (GET, POST, PUT, DELETE, OPTIONS)
 // Allow specific headers (Content-Type, Authorization)
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'httponly' => true,
+    'samesite' => 'None',
+    'secure' => false
+]);
+
+// session_start();
+
+require_once '../../auth/api/auth_check.php';
+requireRole('admin'); // Only admin can access this API
+
+
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Headers: Content-Type");
 
 
 // TODO: Handle preflight OPTIONS request
 // If the request method is OPTIONS, return 200 status and exit
+// if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+//     http_response_code(200);
+//     exit;
+// }
+
+// Stop OPTIONS request early
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     http_response_code(200);
     exit;
 }
 
-
 // TODO: Include the database connection class
 // Assume the Database class has a method getConnection() that returns a PDO instance
- require_once __DIR__ . '/../../../../dp.php';
+ require_once __DIR__ . '/../../../../db.php';
 
 
 // TODO: Get the PDO database connection
@@ -550,4 +570,3 @@ function sanitizeInput($data) {
 }
 
 ?>
-
