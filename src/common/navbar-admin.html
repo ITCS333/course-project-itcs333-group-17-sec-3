@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+
+    <a class="navbar-brand" href="#">Web Dev Course</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#adminNavbar" aria-controls="adminNavbar"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="adminNavbar">
+      <ul class="navbar-nav">
+
+        <!-- Admin Features -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Admin Features
+          </a>
+
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/src/admin/manage_users.html">Manage Students</a></li>
+            <li><a class="dropdown-item" href="/src/resources/admin.html">Manage Resources</a></li>
+            <li><a class="dropdown-item" href="/src/weekly/admin.html">Manage Weekly Breakdown</a></li>
+            <li><a class="dropdown-item" href="/src/assignments/admin.html">Manage Assignments</a></li>
+          </ul>
+        </li>
+
+        <!-- Logout -->
+        <li class="nav-item">
+          <button id="logout-btn" class="btn btn-link nav-link">Logout</button>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
