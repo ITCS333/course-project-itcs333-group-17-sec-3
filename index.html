@@ -56,7 +56,7 @@
                               <!-- Section: Admin Pages -->
                               <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Portal.
                      - Text: "Admin Portal (Manage Students)" -->
-                              <li class="nav-item dropdown">
+                              <li class="nav-item dropdown admin-link" style="display:none" >
                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         Admin Features
@@ -88,7 +88,8 @@
 
 
                               <!-- Section: Student Pages -->
-                              <li class="nav-item dropdown">
+                              <li class="nav-item dropdown student-link" style="display:none">
+
                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Student Features
                                    </a>
@@ -139,6 +140,26 @@
 
           <!-- End of 'main'. -->
      </main>
+     <script>
+     document.addEventListener("DOMContentLoaded", () => {
+       const userRole = sessionStorage.getItem("role"); // 'admin' or 'student'
+
+       const adminLinks = document.querySelectorAll(".admin-link");
+       const studentLinks = document.querySelectorAll(".student-link");
+
+       if (userRole === "admin") {
+         adminLinks.forEach(link => link.style.display = "block");
+         studentLinks.forEach(link => link.style.display = "none");
+       } else if (userRole === "student") {
+         studentLinks.forEach(link => link.style.display = "block");
+         adminLinks.forEach(link => link.style.display = "none");
+       } else {
+         // not logged in → hide both
+         adminLinks.forEach(link => link.style.display = "none");
+         studentLinks.forEach(link => link.style.display = "none");
+       }
+     });
+     </script>
 
      <!-- Bootstrap JS (required for dropdowns and toggles) -->
 

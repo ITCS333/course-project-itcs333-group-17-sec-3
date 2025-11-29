@@ -97,8 +97,8 @@ function isValidPassword(password) {
  * - Call `displayMessage("Login successful!", "success")`.
  * - (Optional) Clear the email and password input fields.
  */
-function handleLogin(event) {
-  // ... your implementation here ...
+
+async function handleLogin(event) {
   event.preventDefault();
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
@@ -108,18 +108,54 @@ function handleLogin(event) {
     return;
   }
 
-    if (!isValidPassword(password)) {
+  if (!isValidPassword(password)) {
     displayMessage("Password must be at least 8 characters.", "error");
     return;
   }
 
-    displayMessage("Login successful!", "success");
-      emailInput.value = "";
-      passwordInput.value = "";
+  try {
+    const response = await fetch("api/index.php", {  
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await response.json();
+    if (data.success) {
+        sessionStorage.setItem("role", data.user.role); // save role
+        displayMessage(data.message, "success");
 
+        if (data.user.role === "admin") {
+            window.location.href = "/src/admin/manage_users.html";
+        } else {
+            // redirect students to "View Course Resources"
+            window.location.href = "/src/resources/list.html";
+        }
+    
 
-
+    // if (data.status === "success")
+    // if (data.success)
+    // {
+    //   displayMessage(data.message, "success");
+    //   if (data.user.role === "admin") {
+    //     window.location.href = "/src/admin/manage_users.html";
+    //   } else {
+    //     window.location.href = "/src/resources/list.html"; 
+    //   }
+    } else {
+      displayMessage(data.message, "error");
+    }
+  } catch (error) {
+    displayMessage("Server error. Please try again later.", "error");
+    console.error(error);
+  }
 }
+
+
+
+
+
+
 
 
 /**
@@ -137,6 +173,34 @@ function setupLoginForm() {
   }
 
 }
+// --- Logout functionality ---
+document.addEventListener("DOMContentLoaded", () => {
+  const logoutBtn = document.getElementById("logout-btn");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        const response = await fetch("/src/auth/api/index.php?action=logout", {
+          method: "GET",
+          credentials: "include"
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          sessionStorage.clear(); // clear all session info
+          window.location.href = "/index.html"; // redirect to homepage
+        } else {
+          alert("Logout failed. Please try again.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Server error during logout.");
+      }
+    });
+  }
+
+
+});
 
 // --- Initial Page Load ---
 // Call the main setup function to attach the event listener.

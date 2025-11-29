@@ -105,7 +105,6 @@ studentTableBody.innerHTML = ""; // clear old rows
     const row = createStudentRow(student);
     studentTableBody.appendChild(row);
   });
-  
 }
 
 /**
@@ -120,30 +119,94 @@ studentTableBody.innerHTML = ""; // clear old rows
  * 4. If validation passes, show an alert: "Password updated successfully!"
  * 5. Clear all three password input fields.
  */
+// function handleChangePassword(event) {
+//   // ... your implementation here ...
+//   event.preventDefault();
+
+//   const current = document.getElementById("current-password").value;
+//   const newPass = document.getElementById("new-password").value;
+//   const confirmPass = document.getElementById("confirm-password").value;
+
+//   if (newPass !== confirmPass) {
+//     alert("Passwords do not match.");
+//     return;
+//   }
+
+//   if (newPass.length < 8) {
+//     alert("Password must be at least 8 characters.");
+//     return;
+//   }
+
+//   alert("Password updated successfully!");
+
+//   document.getElementById("current-password").value = "";
+//   document.getElementById("new-password").value = "";
+//   document.getElementById("confirm-password").value = "";
+// }
+
 function handleChangePassword(event) {
-  // ... your implementation here ...
   event.preventDefault();
 
-  const current = document.getElementById("current-password").value;
-  const newPass = document.getElementById("new-password").value;
-  const confirmPass = document.getElementById("confirm-password").value;
+  // Get input values
+  const studentId = document.getElementById("student-id").value.trim();
+  const current = document.getElementById("current-password").value.trim();
+  const newPass = document.getElementById("new-password").value.trim();
+  const confirmPass = document.getElementById("confirm-password").value.trim();
 
-  if (newPass !== confirmPass) {
-    alert("Passwords do not match.");
-    return;
+  // Frontend validation
+  if (!studentId || !current || !newPass || !confirmPass) {
+      alert("Please fill in all fields.");
+      return;
   }
 
   if (newPass.length < 8) {
-    alert("Password must be at least 8 characters.");
-    return;
+      alert("Password must be at least 8 characters.");
+      return;
   }
 
-  alert("Password updated successfully!");
+  if (newPass !== confirmPass) {
+      alert("Passwords do not match.");
+      return;
+  }
 
-  document.getElementById("current-password").value = "";
-  document.getElementById("new-password").value = "";
-  document.getElementById("confirm-password").value = "";
+  // Prepare JSON body for backend
+  const payload = {
+      student_id: studentId,
+      current_password: current,
+      new_password: newPass
+  };
+
+  fetch("api/index.php?action=change_password", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      credentials: "include", 
+      body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .then(data => {
+      if (data.success) {
+          alert(data.message);
+          // Clear input fields
+          document.getElementById("current-password").value = "";
+          document.getElementById("new-password").value = "";
+          document.getElementById("confirm-password").value = "";
+      } else {
+          alert(`Error: ${data.message}`);
+      }
+  })
+  .catch(err => {
+      console.error("Fetch error:", err);
+      alert("An unexpected error occurred.");
+  });
 }
+
+// Attach to form submit
+document.getElementById("change").addEventListener("click", handleChangePassword);
+
+
+
 
 /**
  * TODO: Implement the handleAddStudent function.
@@ -161,31 +224,50 @@ function handleChangePassword(event) {
  * 5. Clear the "student-name", "student-id", "student-email", and "default-password" input fields.
  */
 function handleAddStudent(event) {
-  // ... your implementation here ...
- 
+  // 1. Prevent the form's default submission behavior
   event.preventDefault();
-
+  // 2. Get the values from "student-name", "student-id", and "student-email".
+  // here We no longer use "student-id" input because backend generates it from email prefix
   const name = document.getElementById("student-name").value.trim();
-  const id = document.getElementById("student-id").value.trim();
   const email = document.getElementById("student-email").value.trim();
-
-  if (!name || !id || !email) {
+  const password = document.getElementById("default-password").value.trim();
+  // 3. Perform validation:
+  if (!name || !email || !password) {
     alert("Please fill out all required fields.");
     return;
   }
-    const newStudent = { name, id, email };
-  students.push(newStudent);
+  // 4. Create a new student object { name, id, email }.
+  //   I am not using 'id' because backend derives it from email prefix
+  const newStudent = { name, email, password };
+  // 5. Send POST request to backend
+  fetch("api/index.php", {
+    method: "POST",
+    credentials: "include",
 
-  renderTable(students);
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newStudent)
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Student added successfully!");
+        // 6. Clear the input fields
+        document.getElementById("student-name").value = "";
+        document.getElementById("student-email").value = "";
+        document.getElementById("default-password").value = "";
 
-  document.getElementById("student-name").value = "";
-  document.getElementById("student-id").value = "";
-  document.getElementById("student-email").value = "";
-
-  const defaultPass = document.getElementById("default-password");
-  if (defaultPass) defaultPass.value = "";
+        // Reload students from backend
+        // we fetch fresh data from backend to keep JSON dynamic
+        loadStudentsAndInitialize();
+      } else {
+        alert(data.message || "Failed to add student.");
+      }
+    })
+    .catch(err => console.error("Error adding student:", err));
 
 }
+
+
 
 /**
  * TODO: Implement the handleTableClick function.
@@ -198,26 +280,111 @@ function handleAddStudent(event) {
  * - Call `renderTable(students)` to update the view.
  * 3. (Optional) Check for "edit-btn" and implement edit logic.
  */
-function handleTableClick(event) {
-  // ... your implementation here ...
-  if (event.target.classList.contains("delete-btn")) {
-    const id = event.target.dataset.id;
-    students = students.filter(s => s.id !== id);
-    renderTable(students);
-  }
-}
+// function handleTableClick(event) {
+//   // ... your implementation here ...
+//   if (event.target.classList.contains("delete-btn")) {
+//     const id = event.target.dataset.id;
+//     students = students.filter(s => s.id !== id);
+//     renderTable(students);
+//   }
+// }
 
-/**
- * TODO: Implement the handleSearch function.
- * This function will be called on the "input" event of the `searchInput`.
- * It should:
- * 1. Get the search term from `searchInput.value` and convert it to lowercase.
- * 2. If the search term is empty, call `renderTable(students)` to show all students.
- * 3. If the search term is not empty:
- * - Filter the global 'students' array to find students whose name (lowercase)
- * includes the search term.
- * - Call `renderTable` with the *filtered array*.
- */
+function handleTableClick(event) {
+  const target = event.target;
+  if (event.target.classList.contains("delete-btn")) {
+
+    const id = event.target.dataset.id;  // this is the email prefix
+    if (!id) return;
+
+    //  1. Call backend delete API
+    fetch(`api/index.php?student_id=${id}`, {
+      method: "DELETE",
+      credentials: "include"
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      if (data.success) {
+        //  2. Remove from frontend
+        students = students.filter(s => s.id !== id);
+        renderTable(students);
+      } else {
+        alert(data.message || "Failed to delete student");
+      }
+
+    })
+    .catch(err => console.error("Delete error:", err));
+  }
+      // EDIT
+      if (target.classList.contains("edit-btn")) {
+        const id = target.dataset.id;
+        const student = students.find(s => s.id === id);
+        if (!student) return;
+
+        // Pre-fill modal fields
+        document.getElementById("edit-student-id").value = student.id;
+        document.getElementById("edit-name").value = student.name;
+        document.getElementById("edit-email").value = student.email;
+
+        // Show modal
+        const modalEl = document.getElementById("editStudentModal");
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+      }
+    }
+const editStudentForm = document.getElementById("edit-student-form");
+
+editStudentForm.addEventListener("submit", function(event) {
+    event.preventDefault(); // stop the form from reloading the page
+
+    const studentId = document.getElementById("edit-student-id").value;
+    const newName = document.getElementById("edit-name").value.trim();
+    const newEmail = document.getElementById("edit-email").value.trim();
+
+    if (!newName || !newEmail) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    const updatedData = {
+        student_id: studentId,
+        name: newName,
+        email: newEmail
+    };
+
+    fetch("api/index.php", {
+        method: "PUT",
+      credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert("Student updated successfully!");
+
+            // Update the frontend array
+            const studentIndex = students.findIndex(s => s.id === studentId);
+            if (studentIndex !== -1) {
+                students[studentIndex].name = newName;
+                students[studentIndex].email = newEmail;
+                students[studentIndex].id = newEmail.split("@")[0];
+            }
+
+            renderTable(students);
+
+            // Close the modal
+            const modalEl = document.getElementById("editStudentModal");
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+        } else {
+            alert(data.message || "Failed to update student");
+        }
+    })
+    .catch(err => console.error("Update error:", err));
+});
+
+
 function handleSearch() {
   const term = searchInput.value.toLowerCase();
 
@@ -298,32 +465,50 @@ function handleSort(event) {
  * - "click" on each header in `tableHeaders` -> `handleSort`
  */
 async function loadStudentsAndInitialize() {
-  // ... your implementation here ...
-    try {
-    const response = await fetch("api/students.json");
-
+  try {
+    // Fetch students from backend (GET request)
+    const response = await fetch("api/index.php"); // GET request
     if (!response.ok) {
-      console.error("Error loading api/students.json");
+      console.error("Failed to fetch students from backend.");
+      return;
+    }
+    // 2- Parse the JSON response
+    const data = await response.json();
+
+    // Check if backend returned success
+    if (!data.success) {
+      console.error("Backend error:", data.message);
       return;
     }
 
-    students = await response.json();
+    // 3- Map backend data to frontend format
+    // Backend returns: { name, email, ... }
+    // Frontend expects: { name, id, email }
+    students = data.data.map(user => {
+      const studentId = user.email.split("@")[0]; // get student ID from email prefix
+      return {
+        name: user.name,
+        id: studentId,
+        email: user.email
+      };
+    });
+
+    // 4- Render the table
     renderTable(students);
 
-    // Event listeners
+    // 5- Attach event listeners
     changePasswordForm.addEventListener("submit", handleChangePassword);
     addStudentForm.addEventListener("submit", handleAddStudent);
     studentTableBody.addEventListener("click", handleTableClick);
-
     searchInput.addEventListener("input", handleSearch);
     tableHeaders.forEach(th => th.addEventListener("click", handleSort));
 
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error("Error loading students:", error);
   }
-
 }
 
 // --- Initial Page Load ---
 // Call the main async function to start the application.
+
 loadStudentsAndInitialize();

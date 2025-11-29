@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../auth/api/auth_check.php';
+?>
 <!--
   Requirement: Create a Responsive Admin Portal
 
@@ -32,6 +35,35 @@
     <!-- TODO: Inside the header, add a main heading (e.g., 'h1') with the text "Admin Portal". -->
     <!-- End of the header. -->
     <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">Web Dev Course</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="adminNavbar">
+              <ul class="navbar-nav">
+                <!-- Admin Features -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    Admin Features
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/src/admin/manage_users.html">Manage Students</a></li>
+                    <li><a class="dropdown-item" href="/src/resources/admin.html">Manage Resources</a></li>
+                    <li><a class="dropdown-item" href="/src/weekly/admin.html">Manage Weekly Breakdown</a></li>
+                    <li><a class="dropdown-item" href="/src/assignments/admin.html">Manage Assignments</a></li>
+                  </ul>
+                </li>
+                <!-- Logout -->
+                <li class="nav-item">
+                      <button id="logout-btn" class="btn btn-link nav-link">Logout</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
         <h1>Admin Portal</h1>
     </header>
     <!-- TODO: Create a 'main' element to hold the primary content of the portal. -->
@@ -49,33 +81,45 @@
                     <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
                     <legend>Password Update</legend>
                     <!-- TODO: Add a 'label' for the current password input. 'for' should be "current-password". -->
-                    <label for="current-password">Current Password:</label>
-
+                    <!-- <label for="current-password">Current Password:</label>
+ -->
                     <!-- TODO: Add an 'input' for the current password.
                          - type="password"
                          - id="current-password"
                          - required -->
-                    <input type="password" id="current-password" required>
-
+                    <!-- <input type="password" id="current-password" required>
+ -->
                     <!-- TODO: Add a 'label' for the new password input. 'for' should be "new-password". -->
-                    <label for="new-password">new password:</label>
-                    <!-- TODO: Add an 'input' for the new password.
+                    <!-- <label for="new-password">new password:</label>
+                    <!-- TODO: Add an 'input' for the new password. 
                          - type="password"
                          - id="new-password"
                          - minlength="8"
                          - required -->
-                    <input type="password" id="new-password" minlength="8" required>
+                    <!-- <input type="password" id="new-password" minlength="8" required> -->
                     <!-- TODO: Add a 'label' for the confirm password input. 'for' should be "confirm-password". -->
-                    <label for="confirm-password">confirm new password:</label>
+                    <!-- <label for="confirm-password">confirm new password:</label> -->
                     <!-- TODO: Add an 'input' to confirm the new password.
                          - type="password"
                          - id="confirm-password"
                          - required -->
-                    <input type="password" id="confirm-password" required>
+                    <!-- <input type="password" id="confirm-password" required> -->
                     <!-- TODO: Add a 'button' to submit the form.
                          - type="submit"
                          - id="change"
                          - Text: "Update Password" -->
+                    <label for="student-id">Student ID</label>
+                    <input type="text" id="student-id">
+
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password">
+
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password">
+
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password">
+
                     <button type="submit" id="change" class="btn btn-primary">Update Password</button>
                     <!-- End of the fieldset. -->
                 </fieldset>
@@ -164,7 +208,7 @@
             <!-- Subsection 2.2: Student List -->
             <!-- TODO: Add a sub-heading (e.g., 'h3') for the list of students, "Registered Students". -->
             <h3>Registered Students</h3>
-            
+
            <!-- Add search input above the student table with id="search-input" -->
 
             <div class="mb-3">
@@ -228,11 +272,46 @@
                     <!-- End of the table. -->
                 </table>
                 <!-- End of the student management section. -->
+
         </section>
         <!-- End of the main content area. -->
     </main>
-    <script src="./manage_users.js" defer></script>
 
+  <!-- Edit Student Modal -->
+    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Student</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <form id="edit-student-form">
+
+              <input type="hidden" id="edit-student-id">
+
+              <div class="mb-3">
+                <label for="edit-name" class="form-label">Full Name</label>
+                <input type="text" id="edit-name" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="edit-email" class="form-label">Email</label>
+                <input type="email" id="edit-email" class="form-control" required>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <script src="./manage_users.js" defer></script>
+     <script src="../auth/login.js" defer></script>
 </body>
 
 </html>
