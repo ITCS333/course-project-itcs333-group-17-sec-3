@@ -1,4 +1,3 @@
-
 /*
   Requirement: Add interactivity and data management to the Admin Portal.
 
@@ -120,30 +119,94 @@ studentTableBody.innerHTML = ""; // clear old rows
  * 4. If validation passes, show an alert: "Password updated successfully!"
  * 5. Clear all three password input fields.
  */
+// function handleChangePassword(event) {
+//   // ... your implementation here ...
+//   event.preventDefault();
+
+//   const current = document.getElementById("current-password").value;
+//   const newPass = document.getElementById("new-password").value;
+//   const confirmPass = document.getElementById("confirm-password").value;
+
+//   if (newPass !== confirmPass) {
+//     alert("Passwords do not match.");
+//     return;
+//   }
+
+//   if (newPass.length < 8) {
+//     alert("Password must be at least 8 characters.");
+//     return;
+//   }
+
+//   alert("Password updated successfully!");
+
+//   document.getElementById("current-password").value = "";
+//   document.getElementById("new-password").value = "";
+//   document.getElementById("confirm-password").value = "";
+// }
+
 function handleChangePassword(event) {
-  // ... your implementation here ...
   event.preventDefault();
 
-  const current = document.getElementById("current-password").value;
-  const newPass = document.getElementById("new-password").value;
-  const confirmPass = document.getElementById("confirm-password").value;
+  // Get input values
+  const studentId = document.getElementById("student-id").value.trim();
+  const current = document.getElementById("current-password").value.trim();
+  const newPass = document.getElementById("new-password").value.trim();
+  const confirmPass = document.getElementById("confirm-password").value.trim();
 
-  if (newPass !== confirmPass) {
-    alert("Passwords do not match.");
-    return;
+  // Frontend validation
+  if (!studentId || !current || !newPass || !confirmPass) {
+      alert("Please fill in all fields.");
+      return;
   }
 
   if (newPass.length < 8) {
-    alert("Password must be at least 8 characters.");
-    return;
+      alert("Password must be at least 8 characters.");
+      return;
   }
 
-  alert("Password updated successfully!");
+  if (newPass !== confirmPass) {
+      alert("Passwords do not match.");
+      return;
+  }
 
-  document.getElementById("current-password").value = "";
-  document.getElementById("new-password").value = "";
-  document.getElementById("confirm-password").value = "";
+  // Prepare JSON body for backend
+  const payload = {
+      student_id: studentId,
+      current_password: current,
+      new_password: newPass
+  };
+
+  fetch("api/index.php?action=change_password", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      credentials: "include", 
+      body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .then(data => {
+      if (data.success) {
+          alert(data.message);
+          // Clear input fields
+          document.getElementById("current-password").value = "";
+          document.getElementById("new-password").value = "";
+          document.getElementById("confirm-password").value = "";
+      } else {
+          alert(`Error: ${data.message}`);
+      }
+  })
+  .catch(err => {
+      console.error("Fetch error:", err);
+      alert("An unexpected error occurred.");
+  });
 }
+
+// Attach to form submit
+document.getElementById("change").addEventListener("click", handleChangePassword);
+
+
+
 
 /**
  * TODO: Implement the handleAddStudent function.
@@ -179,6 +242,8 @@ function handleAddStudent(event) {
   // 5. Send POST request to backend
   fetch("api/index.php", {
     method: "POST",
+    credentials: "include",
+
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newStudent)
   })
@@ -233,7 +298,8 @@ function handleTableClick(event) {
 
     //  1. Call backend delete API
     fetch(`api/index.php?student_id=${id}`, {
-      method: "DELETE"
+      method: "DELETE",
+      credentials: "include"
     })
     .then(res => res.json())
     .then(data => {
@@ -288,6 +354,7 @@ editStudentForm.addEventListener("submit", function(event) {
 
     fetch("api/index.php", {
         method: "PUT",
+      credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData)
     })

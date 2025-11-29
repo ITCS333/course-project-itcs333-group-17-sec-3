@@ -211,7 +211,7 @@ function createStudent($db, $data) {
     // Check if student_id, name, email, and password are provided
     // If any field is missing, return error response with 400 status
 
-  $name = trim($data['name']);
+    $name = trim($data['name']);
     $email = trim($data['email']);
     $password = trim($data['password']);
 
@@ -393,62 +393,67 @@ function deleteStudent($db, $studentId) {
  *   - current_password: The student's current password
  *   - new_password: The new password to set
  */
-// function changePassword($db, $data) {
-//     // TODO: Validate required fields
-//     // Check if student_id, current_password, and new_password are provided
-//     // If any field is missing, return error response with 400 status
-//         if (!isset($data['student_id'], $data['current_password'], $data['new_password'])) {
-//         sendResponse(["success" => false, "message" => "Missing required fields"], 400);
-//     }
 
-//     // TODO: Validate new password strength
-//     // Check minimum length (at least 8 characters)
-//     // If validation fails, return error response with 400 status
-//         $student_id = $data['student_id'];
-//     $current = $data['current_password'];
-//     $new = $data['new_password'];
+function changePassword($db, $data) {
+    // Validate required fields
+    if (!isset($data['student_id'], $data['current_password'], $data['new_password'])) {
+        sendResponse([
+            "success" => false, 
+            "message" => "Missing required fields"
+        ], 400);
+    }
 
-//         if (strlen($new) < 8) {
-//         sendResponse(["success" => false, "message" => "New password must be at least 8 characters"], 400);
-//     }
+    $studentId = trim($data['student_id']);
+    $current = $data['current_password'];
+    $new = $data['new_password'];
 
-//     // TODO: Retrieve current password hash from database
-//     // Prepare and execute SELECT query to get password
-//         $stmt = $db->prepare("SELECT password FROM students WHERE student_id = ?");
-//     $stmt->execute([$student_id]);
-//     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Validate new password strength
+    if (strlen($new) < 8) {
+        sendResponse([
+            "success" => false, 
+            "message" => "New password must be at least 8 characters"
+        ], 400);
+    }
 
-//     // TODO: Verify current password
-//     // Use password_verify() to check if current_password matches the hash
-//     // If verification fails, return error response with 401 status (Unauthorized)
-//         if (!$row) {
-//         sendResponse(["success" => false, "message" => "Student not found"], 404);
-//     }
+    // Retrieve current password hash from database
+    $stmt = $db->prepare("SELECT password FROM users WHERE is_admin = 0 AND SUBSTRING_INDEX(email,'@',1) = ?");
+    $stmt->execute([$studentId]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//     if (!password_verify($current, $row['password'])) {
-//         sendResponse(["success" => false, "message" => "Incorrect current password"], 401);
-//     }
+    if (!$row) {
+        sendResponse([
+            "success" => false, 
+            "message" => "Student not found"
+        ], 404);
+    }
 
-//     // TODO: Hash the new password
-//     // Use password_hash() with PASSWORD_DEFAULT
-//         $hashed = password_hash($new, PASSWORD_DEFAULT);
+    // Verify current password
+    if (!password_verify($current, $row['password'])) {
+        sendResponse([
+            "success" => false, 
+            "message" => "Incorrect current password"
+        ], 401);
+    }
 
-//     // TODO: Update password in database
-//     // Prepare UPDATE query
-//         $update = $db->prepare("UPDATE students SET password = ? WHERE student_id = ?");
+    // Hash the new password
+    $hashed = password_hash($new, PASSWORD_DEFAULT);
 
-//     // TODO: Bind parameters and execute
-//         $ok = $update->execute([$hashed, $student_id]);
+    // Update password in database
+    $update = $db->prepare("UPDATE users SET password = ? WHERE SUBSTRING_INDEX(email,'@',1) = ?");
+    $ok = $update->execute([$hashed, $studentId]);
 
-//     // TODO: Check if update was successful
-//     // If yes, return success response
-//     // If no, return error response with 500 status
-//         if ($ok) {
-//         sendResponse(["success" => true, "message" => "Password updated"]);
-//     } else {
-//         sendResponse(["success" => false, "message" => "Failed to update password"], 500);
-//     }
-// }
+    if ($ok) {
+        sendResponse([
+            "success" => true, 
+            "message" => "Password updated successfully"
+        ]);
+    } else {
+        sendResponse([
+            "success" => false, 
+            "message" => "Failed to update password"
+        ], 500);
+    }
+}
 
 
 
@@ -570,3 +575,5 @@ function sanitizeInput($data) {
 }
 
 ?>
+
+

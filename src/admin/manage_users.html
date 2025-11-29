@@ -81,33 +81,45 @@ require_once __DIR__ . '/../auth/api/auth_check.php';
                     <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
                     <legend>Password Update</legend>
                     <!-- TODO: Add a 'label' for the current password input. 'for' should be "current-password". -->
-                    <label for="current-password">Current Password:</label>
-
+                    <!-- <label for="current-password">Current Password:</label>
+ -->
                     <!-- TODO: Add an 'input' for the current password.
                          - type="password"
                          - id="current-password"
                          - required -->
-                    <input type="password" id="current-password" required>
-
+                    <!-- <input type="password" id="current-password" required>
+ -->
                     <!-- TODO: Add a 'label' for the new password input. 'for' should be "new-password". -->
-                    <label for="new-password">new password:</label>
-                    <!-- TODO: Add an 'input' for the new password.
+                    <!-- <label for="new-password">new password:</label>
+                    <!-- TODO: Add an 'input' for the new password. 
                          - type="password"
                          - id="new-password"
                          - minlength="8"
                          - required -->
-                    <input type="password" id="new-password" minlength="8" required>
+                    <!-- <input type="password" id="new-password" minlength="8" required> -->
                     <!-- TODO: Add a 'label' for the confirm password input. 'for' should be "confirm-password". -->
-                    <label for="confirm-password">confirm new password:</label>
+                    <!-- <label for="confirm-password">confirm new password:</label> -->
                     <!-- TODO: Add an 'input' to confirm the new password.
                          - type="password"
                          - id="confirm-password"
                          - required -->
-                    <input type="password" id="confirm-password" required>
+                    <!-- <input type="password" id="confirm-password" required> -->
                     <!-- TODO: Add a 'button' to submit the form.
                          - type="submit"
                          - id="change"
                          - Text: "Update Password" -->
+                    <label for="student-id">Student ID</label>
+                    <input type="text" id="student-id">
+
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password">
+
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password">
+
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password">
+
                     <button type="submit" id="change" class="btn btn-primary">Update Password</button>
                     <!-- End of the fieldset. -->
                 </fieldset>
