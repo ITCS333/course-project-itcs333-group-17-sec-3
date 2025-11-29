@@ -35,35 +35,7 @@ require_once __DIR__ . '/../auth/api/auth_check.php';
     <!-- TODO: Inside the header, add a main heading (e.g., 'h1') with the text "Admin Portal". -->
     <!-- End of the header. -->
     <header>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="#">Web Dev Course</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="adminNavbar">
-              <ul class="navbar-nav">
-                <!-- Admin Features -->
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    Admin Features
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/src/admin/manage_users.html">Manage Students</a></li>
-                    <li><a class="dropdown-item" href="/src/resources/admin.html">Manage Resources</a></li>
-                    <li><a class="dropdown-item" href="/src/weekly/admin.html">Manage Weekly Breakdown</a></li>
-                    <li><a class="dropdown-item" href="/src/assignments/admin.html">Manage Assignments</a></li>
-                  </ul>
-                </li>
-                <!-- Logout -->
-                <li class="nav-item">
-                      <button id="logout-btn" class="btn btn-link nav-link">Logout</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-
+    <div id="navbar-placeholder"></div>
         <h1>Admin Portal</h1>
     </header>
     <!-- TODO: Create a 'main' element to hold the primary content of the portal. -->
@@ -91,7 +63,7 @@ require_once __DIR__ . '/../auth/api/auth_check.php';
  -->
                     <!-- TODO: Add a 'label' for the new password input. 'for' should be "new-password". -->
                     <!-- <label for="new-password">new password:</label>
-                    <!-- TODO: Add an 'input' for the new password. 
+                        TODO: Add an 'input' for the new password. 
                          - type="password"
                          - id="new-password"
                          - minlength="8"
@@ -312,6 +284,14 @@ require_once __DIR__ . '/../auth/api/auth_check.php';
     </div>
     <script src="./manage_users.js" defer></script>
      <script src="../auth/login.js" defer></script>
+         <script>
+      fetch("/src/common/navbar-admin.html")
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-placeholder").innerHTML = html;
+        });
+    </script>
+
 </body>
 
 </html>

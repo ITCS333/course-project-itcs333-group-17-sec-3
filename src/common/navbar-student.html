@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+
+    <a class="navbar-brand" href="#">Web Dev Course</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#studentNavbar" aria-controls="studentNavbar"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="studentNavbar">
+      <ul class="navbar-nav">
+
+        <!-- Student Features -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Student Features
+          </a>
+
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/src/resources/list.html">View Course Resources</a></li>
+            <li><a class="dropdown-item" href="/src/weekly/list.html">View Weekly Breakdown</a></li>
+            <li><a class="dropdown-item" href="/src/assignments/list.html">View Assignments</a></li>
+          </ul>
+        </li>
+
+        <!-- Logout -->
+        <li class="nav-item">
+          <button id="logout-btn" class="btn btn-link nav-link">Logout</button>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
