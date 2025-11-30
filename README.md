@@ -3,7 +3,19 @@
 # ITCS### Course Page
 
 ## The names and student IDs of all team members.
+202100779 NAJD MANAHI RAJAB ATIAH
 
+202102651 NOOF ISA ALI MOHAMED
+
+202200593 ESHA ASHFAR AHMED ABBASI
+
+202201577 ALHANOOF TAHA A.QADER ALBALOOSHI
 ## A table indicating which student was responsible for which task.
+| Task Number | Student Name                          |
+|-------------|----------------------------------------|
+| Task 1      | Noof Isa Ali Mohamed                   |
+| Task 2      | Alhanoof Taha A. Qader Albalooshi      |
+| Task 3      | Najd Manahi Rajab Atiah                |
+| Task 4      | Esha Ashfar Ahmed Abbasi               |
 
 ## A link to your live, hosted application on Replit.
