@@ -24,6 +24,13 @@ let currentComments = [];
 
 // --- Element Selections ---
 // TODO: Select all the elements you added IDs for in step 2.
+const weekTitle = document.querySelector('#week-title');
+const weekStartDate = document.querySelector('#week-start-date');
+const weekDescription = document.querySelector('#week-description');
+const weekLinksList = document.querySelector('#week-links-list');
+const commentList = document.querySelector('#comment-list');
+const commentForm = document.querySelector('#comment-form');
+const newCommentText = document.querySelector('#new-comment-text');
 
 // --- Functions ---
 
@@ -36,6 +43,9 @@ let currentComments = [];
  */
 function getWeekIdFromURL() {
   // ... your implementation here ...
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  return id;
 }
 
 /**
@@ -51,6 +61,28 @@ function getWeekIdFromURL() {
  */
 function renderWeekDetails(week) {
   // ... your implementation here ...
+  if (!week) return;
+
+  weekTitle.textContent = week.title;
+  weekStartDate.textContent = `Starts on: ${week.startDate}`;
+  weekDescription.textContent = week.description || '';
+
+  // Clear the list first
+  weekLinksList.innerHTML = '';
+
+  if (Array.isArray(week.links)) {
+    week.links.forEach(linkUrl => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+
+      a.href = linkUrl;
+      a.textContent = linkUrl;
+      a.target = '_blank';
+
+      li.appendChild(a);
+      weekLinksList.appendChild(li);
+    });
+  }
 }
 
 /**
@@ -61,6 +93,18 @@ function renderWeekDetails(week) {
  */
 function createCommentArticle(comment) {
   // ... your implementation here ...
+  const article = document.createElement('article');
+
+  const p = document.createElement('p');
+  p.textContent = comment.text;
+
+  const footer = document.createElement('footer');
+  footer.textContent = `Posted by: ${comment.author}`;
+
+  article.appendChild(p);
+  article.appendChild(footer);
+
+  return article;
 }
 
 /**
@@ -73,6 +117,19 @@ function createCommentArticle(comment) {
  */
 function renderComments() {
   // ... your implementation here ...
+  commentList.innerHTML = '';
+
+  if (!currentComments.length) {
+    const p = document.createElement('p');
+    p.textContent = 'No comments yet. Be the first to ask a question!';
+    commentList.appendChild(p);
+    return;
+  }
+
+  currentComments.forEach(comment => {
+    const article = createCommentArticle(comment);
+    commentList.appendChild(article);
+  });
 }
 
 /**
@@ -90,6 +147,21 @@ function renderComments() {
  */
 function handleAddComment(event) {
   // ... your implementation here ...
+  event.preventDefault();
+
+  const commentText = newCommentText.value.trim();
+  if (!commentText) {
+    return;
+  }
+
+  const newComment = {
+    author: 'Student',
+    text: commentText
+  };
+
+  currentComments.push(newComment);
+  renderComments();
+  newCommentText.value = '';
 }
 
 /**
@@ -111,6 +183,48 @@ function handleAddComment(event) {
  */
 async function initializePage() {
   // ... your implementation here ...
+  currentWeekId = getWeekIdFromURL();
+
+  if (!currentWeekId) {
+    if (weekTitle) {
+      weekTitle.textContent = 'Week not found.';
+    }
+    return;
+  }
+
+  try {
+    // Adjust paths to match the folder structure: api/weeks.json and api/comments.json
+    const [weeksResponse, commentsResponse] = await Promise.all([
+      fetch('api/weeks.json'),
+      fetch('api/comments.json')
+    ]);
+
+    const weeksData = await weeksResponse.json();
+    const commentsData = await commentsResponse.json();
+
+    const week = Array.isArray(weeksData)
+      ? weeksData.find(w => w.id === currentWeekId)
+      : null;
+
+    currentComments = commentsData[currentWeekId] || [];
+
+    if (!week) {
+      weekTitle.textContent = 'Week not found.';
+      return;
+    }
+
+    renderWeekDetails(week);
+    renderComments();
+
+    if (commentForm) {
+      commentForm.addEventListener('submit', handleAddComment);
+    }
+  } catch (error) {
+    console.error('Error loading week details:', error);
+    if (weekTitle) {
+      weekTitle.textContent = 'Failed to load week details.';
+    }
+  }
 }
 
 // --- Initial Page Load ---
