@@ -1,7 +1,5 @@
 <!--
   Requirement: Create the Dedicated Page for a Single Resource
-
-  Instructions:
   This page displays the details for one resource and allows for discussion.
 -->
 <!DOCTYPE html>
@@ -15,14 +13,13 @@
     <title>Resource Details</title>
 
     <!-- Stylesheet / Framework -->
-    <!-- غيّري المسار حسب مشروعك -->
     <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body>
 
     <!-- Header -->
     <header>
-        <h1>Chapter 1 Notes</h1>
+        <h1 id="resource-title">Chapter 1 Notes</h1>
     </header>
 
     <!-- Main Content -->
@@ -30,14 +27,17 @@
 
         <!-- Section 1: Resource Information -->
         <article>
-            <p>
+            <p id="resource-description">
                 This chapter provides an introduction to Internet concepts, including basic networking,
                 communication models, and web technologies. It explains the foundational ideas needed
                 to understand how the web works.
             </p>
 
-            <a href="https://example.com"
-               target="_blank">
+            <a
+                id="resource-link"
+                href="https://example.com"
+                target="_blank"
+            >
                 Access Resource Material
             </a>
         </article>
@@ -48,7 +48,7 @@
             <h2>Discussion</h2>
 
             <!-- Existing comments -->
-            <div id="comments-list">
+            <div id="comment-list">
 
                 <!-- Comment 1 -->
                 <article class="comment">
@@ -83,5 +83,7 @@
         <!-- End Discussion Section -->
 
     </main>
+  
+    <script src="details.js" defer></script>
 </body>
 </html>
