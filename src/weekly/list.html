@@ -77,6 +77,14 @@ require_once_DIR_. /../auth/api/auth_check.php';
         </section>
     <!-- End of main. -->
     </main>
-
+<script>
+fetch("/src/common/navbar-student.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("navbar-placeholder").innerHTML = html;
+  });
+</script>
+<script src="../auth/login.js" defer></script>
+<script src="list.js" defer></script>
 </body>
 </html>
