@@ -1,4 +1,14 @@
 <?php
+session_set_cookie_params ([
+    'lifetime' => 0,
+    'path' => '/',
+    'httponly' => true,
+    'samesite' => 'None',
+    'secure' => false
+]);
+require_once '../../auth/api/auth_check.php';
+requireRole('admin');
+
 /**
  * Course Resources API
  * 
