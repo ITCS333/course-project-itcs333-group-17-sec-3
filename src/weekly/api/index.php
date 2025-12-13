@@ -1,13 +1,15 @@
 <?php
 session_set_cookie_params([
-'lifetime' =>0,
-'path' => '/',
-'httponly' = true,
-'samesite' = 'None',
-'secure' = false
+    'lifetime' => 0,
+    'path' => '/',
+    'httponly' => true,
+    'samesite' => 'None',
+    'secure' => false
 ]);
-require_once ../../auth/api/auth_check.php';
-requireRolel ('admin');
+
+session_start();
+require_once '../../auth/api/auth_check.php';
+requireRole('admin');
 /**
  * Weekly Course Breakdown API
  * 
