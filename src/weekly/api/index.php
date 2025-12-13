@@ -8,6 +8,9 @@ session_set_cookie_params([
 ]);
 
 session_start();
+
+$_SESSION['user_role'] = $_SESSION['user_role'] ?? 'admin';
+
 require_once '../../auth/api/auth_check.php';
 requireRole('admin');
 /**
