@@ -203,7 +203,11 @@ function handleChangePassword(event) {
 }
 
 // Attach to form submit
-document.getElementById("change").addEventListener("click", handleChangePassword);
+// document.getElementById("change").addEventListener("click", handleChangePassword);
+const changeBtn = document.getElementById("change");
+if (changeBtn) {
+  changeBtn.addEventListener("click", handleChangePassword);
+}
 
 
 
