@@ -539,15 +539,6 @@ async function loadStudentsAndInitialize() {
   //   editStudentForm.addEventListener("submit", () => {});
   // }
 
-    // 5- Attach event listeners
-    // changePasswordForm.addEventListener("submit", handleChangePassword);
-    // addStudentForm.addEventListener("submit", handleAddStudent);
-    // studentTableBody.addEventListener("click", handleTableClick);
-    // searchInput.addEventListener("input", handleSearch);
-    // tableHeaders.forEach(th => th.addEventListener("click", handleSort));
-
-
-
   } catch (error) {
     console.error("Error loading students:", error);
   }
