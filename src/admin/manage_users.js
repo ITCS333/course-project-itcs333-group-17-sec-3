@@ -99,6 +99,7 @@ function createStudentRow(student) {
  */
 function renderTable(studentArray) {
   // ... your implementation here ...
+  if (!studentTableBody) return;
 studentTableBody.innerHTML = ""; // clear old rows
 
   studentArray.forEach(student => {
@@ -204,10 +205,6 @@ function handleChangePassword(event) {
 
 // Attach to form submit
 // document.getElementById("change").addEventListener("click", handleChangePassword);
-const changeBtn = document.getElementById("change");
-if (changeBtn) {
-  changeBtn.addEventListener("click", handleChangePassword);
-}
 
 
 
@@ -332,23 +329,41 @@ function handleTableClick(event) {
 
         // Show modal
         const modalEl = document.getElementById("editStudentModal");
-        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-        modal.show();
+        if (window.bootstrap && modalEl) {
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.show();
+}
+
       }
     }
+// const editStudentForm = document.getElementById("edit-student-form");
+
+// editStudentForm.addEventListener("submit", function(event) {
+//     event.preventDefault(); // stop the form from reloading the page
+
+//     const studentId = document.getElementById("edit-student-id").value;
+//     const newName = document.getElementById("edit-name").value.trim();
+//     const newEmail = document.getElementById("edit-email").value.trim();
+
+//     if (!newName || !newEmail) {
+//         alert("Please fill out all fields.");
+//         return;
+//     }
 const editStudentForm = document.getElementById("edit-student-form");
 
-editStudentForm.addEventListener("submit", function(event) {
-    event.preventDefault(); // stop the form from reloading the page
+if (editStudentForm) {
+    editStudentForm.addEventListener("submit", function(event) {
+        event.preventDefault(); // stop the form from reloading the page
 
-    const studentId = document.getElementById("edit-student-id").value;
-    const newName = document.getElementById("edit-name").value.trim();
-    const newEmail = document.getElementById("edit-email").value.trim();
+        const studentId = document.getElementById("edit-student-id").value;
+        const newName = document.getElementById("edit-name").value.trim();
+        const newEmail = document.getElementById("edit-email").value.trim();
 
-    if (!newName || !newEmail) {
-        alert("Please fill out all fields.");
-        return;
-    }
+        if (!newName || !newEmail) {
+            alert("Please fill out all fields.");
+            return;
+        }
+      
 
     const updatedData = {
         student_id: studentId,
@@ -387,9 +402,10 @@ editStudentForm.addEventListener("submit", function(event) {
     })
     .catch(err => console.error("Update error:", err));
 });
-
+}
 
 function handleSearch() {
+  if (!searchInput) return;
   const term = searchInput.value.toLowerCase();
 
   if (term === "") {
@@ -469,6 +485,7 @@ function handleSort(event) {
  * - "click" on each header in `tableHeaders` -> `handleSort`
  */
 async function loadStudentsAndInitialize() {
+
   try {
     // Fetch students from backend (GET request)
     const response = await fetch("api/index.php"); // GET request
@@ -499,13 +516,37 @@ async function loadStudentsAndInitialize() {
 
     // 4- Render the table
     renderTable(students);
+      if (changePasswordForm) {
+    changePasswordForm.addEventListener("submit", handleChangePassword);
+  }
+
+  if (addStudentForm) {
+    addStudentForm.addEventListener("submit", handleAddStudent);
+  }
+
+  if (studentTableBody) {
+    studentTableBody.addEventListener("click", handleTableClick);
+  }
+
+  if (searchInput) {
+   searchInput.addEventListener("input", handleSearch);
+  }
+
+  tableHeaders.forEach(th => {
+ if (th) th.addEventListener("click", handleSort);  });
+
+  // if (editStudentForm) {
+  //   editStudentForm.addEventListener("submit", () => {});
+  // }
 
     // 5- Attach event listeners
-    changePasswordForm.addEventListener("submit", handleChangePassword);
-    addStudentForm.addEventListener("submit", handleAddStudent);
-    studentTableBody.addEventListener("click", handleTableClick);
-    searchInput.addEventListener("input", handleSearch);
-    tableHeaders.forEach(th => th.addEventListener("click", handleSort));
+    // changePasswordForm.addEventListener("submit", handleChangePassword);
+    // addStudentForm.addEventListener("submit", handleAddStudent);
+    // studentTableBody.addEventListener("click", handleTableClick);
+    // searchInput.addEventListener("input", handleSearch);
+    // tableHeaders.forEach(th => th.addEventListener("click", handleSort));
+
+
 
   } catch (error) {
     console.error("Error loading students:", error);
