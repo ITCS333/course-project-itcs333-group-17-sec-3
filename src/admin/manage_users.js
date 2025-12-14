@@ -404,7 +404,7 @@ if (editStudentForm) {
 });
 }
 
-function handleSearch() {
+function handleSearch(event) {
   if (!searchInput) return;
   const term = searchInput.value.toLowerCase();
 
