@@ -38,7 +38,7 @@ session_set_cookie_params([
 ]);
 
 session_start();
-
+$_SESSION = $_SESSION ?? [];
 require_once '../../auth/api/auth_check.php';
 requireRole('admin'); // Only admin can access this API
 
