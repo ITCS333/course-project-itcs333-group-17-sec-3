@@ -6,6 +6,9 @@ session_set_cookie_params([
     'samesite' => 'None',
     'secure' => false
 ]);
+
+session_start();
+
 require_once '../../auth/api/auth_check.php';
 requireRole('admin'); 
 
